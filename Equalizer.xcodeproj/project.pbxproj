@@ -11,6 +11,7 @@
 		9945A89121D3C2D700D2EA55 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945A89021D3C2D700D2EA55 /* ViewController.swift */; };
 		9945A89321D3C2DA00D2EA55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9945A89221D3C2DA00D2EA55 /* Assets.xcassets */; };
 		9945A89621D3C2DA00D2EA55 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9945A89421D3C2DA00D2EA55 /* Main.storyboard */; };
+		99EBBD4121D5650C00A0AB6A /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EBBD4021D5650C00A0AB6A /* Protocols.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		9945A89521D3C2DA00D2EA55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9945A89721D3C2DA00D2EA55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9945A89821D3C2DA00D2EA55 /* Equalizer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Equalizer.entitlements; sourceTree = "<group>"; };
+		99EBBD4021D5650C00A0AB6A /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 				9945A89021D3C2D700D2EA55 /* ViewController.swift */,
 				9945A89221D3C2DA00D2EA55 /* Assets.xcassets */,
 				9945A89421D3C2DA00D2EA55 /* Main.storyboard */,
+				99EBBD4021D5650C00A0AB6A /* Protocols.swift */,
 				9945A89721D3C2DA00D2EA55 /* Info.plist */,
 				9945A89821D3C2DA00D2EA55 /* Equalizer.entitlements */,
 			);
@@ -133,6 +136,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99EBBD4121D5650C00A0AB6A /* Protocols.swift in Sources */,
 				9945A89121D3C2D700D2EA55 /* ViewController.swift in Sources */,
 				9945A88F21D3C2D700D2EA55 /* AppDelegate.swift in Sources */,
 			);
