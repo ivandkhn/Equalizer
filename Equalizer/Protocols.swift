@@ -9,16 +9,19 @@
 import Foundation
 
 /// Class conforming this protocol can process audio data.
-protocol AudioDataProcessable {
-    static var description: String {get}
+class AbstractAudioProcessor {
+    var windowSize: UInt = 1024
     
-    var windowSize: UInt {get set}
+    var buffer: [AudioDataChunk] = [AudioDataChunk()]
     
-    var buffer: [AudioDataChunk] {get set}
+    func process(initialData: AudioDataChunk, wetLevel: Double) -> AudioDataChunk {
+        return initialData
+    }
     
-    init(newWindowSize: UInt)
-    
-    func process(data: AudioDataChunk, wetLevel: Double) -> AudioDataChunk
+}
+
+protocol DescriptonProviding {
+    var description: String {get}
 }
 
 
@@ -36,25 +39,23 @@ class AudioDataChunk {
         values = data
         length = values.count
     }
+    
+    init() {
+        values = []
+        length = values.count
+    }
 }
 
 
-class testAudioEffect: AudioDataProcessable {
-    static var description = """
-        Test audio effect description.
-    """
-    
-    var description: String
-    
-    var windowSize: UInt
-    
-    var buffer: [AudioDataChunk]
-    
-    required init(newWindowSize: UInt) {
-        <#code#>
-    }
-    
-    func process(data: AudioDataChunk, wetLevel: Double) -> AudioDataChunk {
-        <#code#>
-    }
+class testAudioEffect: AbstractAudioProcessor, DescriptonProviding {
+    let description = "TEST1"
 }
+
+class testAudioEffect2: AbstractAudioProcessor, DescriptonProviding {
+    let description = "TEST2"
+}
+
+//for i in [testAudioEffect(), testAudioEffect2()] {
+//    let i = i as! DescriptonProviding
+//    print(i.description)
+//}
