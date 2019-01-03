@@ -11,8 +11,25 @@
 		9945A89121D3C2D700D2EA55 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9945A89021D3C2D700D2EA55 /* ViewController.swift */; };
 		9945A89321D3C2DA00D2EA55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9945A89221D3C2DA00D2EA55 /* Assets.xcassets */; };
 		9945A89621D3C2DA00D2EA55 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9945A89421D3C2DA00D2EA55 /* Main.storyboard */; };
+		9982C4E521DE09C3009FA36A /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982C4E421DE09C3009FA36A /* AudioPlayer.swift */; };
+		9982C4F021DE0ED8009FA36A /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9982C4EE21DE0ED8009FA36A /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9982C4F521DE1308009FA36A /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9982C4F421DE1307009FA36A /* test.wav */; };
 		99EBBD4121D5650C00A0AB6A /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EBBD4021D5650C00A0AB6A /* Protocols.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9982C4F121DE0ED8009FA36A /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9982C4F021DE0ED8009FA36A /* AudioKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9945A88B21D3C2D600D2EA55 /* Equalizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Equalizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -22,6 +39,9 @@
 		9945A89521D3C2DA00D2EA55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9945A89721D3C2DA00D2EA55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9945A89821D3C2DA00D2EA55 /* Equalizer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Equalizer.entitlements; sourceTree = "<group>"; };
+		9982C4E421DE09C3009FA36A /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		9982C4EE21DE0ED8009FA36A /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
+		9982C4F421DE1307009FA36A /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
 		99EBBD4021D5650C00A0AB6A /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -39,8 +59,10 @@
 		9945A88221D3C2D600D2EA55 = {
 			isa = PBXGroup;
 			children = (
+				9982C4EE21DE0ED8009FA36A /* AudioKit.framework */,
 				9945A88D21D3C2D600D2EA55 /* Equalizer */,
 				9945A88C21D3C2D600D2EA55 /* Products */,
+				9982C4F221DE1161009FA36A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -55,8 +77,10 @@
 		9945A88D21D3C2D600D2EA55 /* Equalizer */ = {
 			isa = PBXGroup;
 			children = (
+				9982C4F421DE1307009FA36A /* test.wav */,
 				9945A88E21D3C2D600D2EA55 /* AppDelegate.swift */,
 				9945A89021D3C2D700D2EA55 /* ViewController.swift */,
+				9982C4E421DE09C3009FA36A /* AudioPlayer.swift */,
 				9945A89221D3C2DA00D2EA55 /* Assets.xcassets */,
 				9945A89421D3C2DA00D2EA55 /* Main.storyboard */,
 				99EBBD4021D5650C00A0AB6A /* Protocols.swift */,
@@ -64,6 +88,13 @@
 				9945A89821D3C2DA00D2EA55 /* Equalizer.entitlements */,
 			);
 			path = Equalizer;
+			sourceTree = "<group>";
+		};
+		9982C4F221DE1161009FA36A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -76,6 +107,7 @@
 				9945A88721D3C2D600D2EA55 /* Sources */,
 				9945A88821D3C2D600D2EA55 /* Frameworks */,
 				9945A88921D3C2D600D2EA55 /* Resources */,
+				9982C4F121DE0ED8009FA36A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -98,6 +130,7 @@
 				TargetAttributes = {
 					9945A88A21D3C2D600D2EA55 = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -124,6 +157,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9982C4F521DE1308009FA36A /* test.wav in Resources */,
 				9945A89321D3C2DA00D2EA55 /* Assets.xcassets in Resources */,
 				9945A89621D3C2DA00D2EA55 /* Main.storyboard in Resources */,
 			);
@@ -139,6 +173,7 @@
 				99EBBD4121D5650C00A0AB6A /* Protocols.swift in Sources */,
 				9945A89121D3C2D700D2EA55 /* ViewController.swift in Sources */,
 				9945A88F21D3C2D700D2EA55 /* AppDelegate.swift in Sources */,
+				9982C4E521DE09C3009FA36A /* AudioPlayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,14 +312,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = LX483546M4;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Equalizer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = johndahrah.Equalizer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -296,14 +336,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = LX483546M4;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Equalizer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = johndahrah.Equalizer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

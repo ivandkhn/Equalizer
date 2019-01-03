@@ -18,7 +18,10 @@ class ViewController: NSViewController {
     }
     
     @IBAction func testButtonPressed(_ sender: NSButton) {
-        displayAlert(text: "button pressed")
+        //displayAlert(text: "button pressed")
+        
+        let player = AudioPlayer()
+        player.logAmplitudes(first: 10)
     }
     
     override var representedObject: Any? {
