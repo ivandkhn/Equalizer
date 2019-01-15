@@ -9,7 +9,13 @@
 import Cocoa
 
 class ViewController: NSViewController {
+    
+    // MARK: -- UI elements:
     @IBOutlet weak var testButton: NSButton!
+    
+    
+    // MARK: -- Model elements:
+    var player: AudioPlayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,8 +26,18 @@ class ViewController: NSViewController {
     @IBAction func testButtonPressed(_ sender: NSButton) {
         //displayAlert(text: "button pressed")
         
-        let player = AudioPlayer()
-        player.logAmplitudes(first: 10)
+        if let loadedPlayer = player {
+            // loadedPlayer.logAmplitudes(first: 10)
+            
+            if (loadedPlayer.isPlaying) {
+                loadedPlayer.isPlaying = false
+            } else {
+                loadedPlayer.initBeforePlaying()
+                loadedPlayer.isPlaying = true
+            }
+        } else {
+            player = AudioPlayer()
+        }
     }
     
     override var representedObject: Any? {
