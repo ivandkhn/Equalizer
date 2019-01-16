@@ -11,38 +11,53 @@ import Cocoa
 class ViewController: NSViewController {
     
     // MARK: -- UI elements:
-    @IBOutlet weak var testButton: NSButton!
-    
+    @IBOutlet weak var errorLabel: NSTextField!
     
     // MARK: -- Model elements:
     var player: AudioPlayer?
+    var selectedFile: URL? = nil
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-    
-    @IBAction func testButtonPressed(_ sender: NSButton) {
-        //displayAlert(text: "button pressed")
-        
-        if let loadedPlayer = player {
-            // loadedPlayer.logAmplitudes(first: 10)
-            
-            if (loadedPlayer.isPlaying) {
-                loadedPlayer.isPlaying = false
-            } else {
-                loadedPlayer.initBeforePlaying()
-                loadedPlayer.isPlaying = true
-            }
-        } else {
-            player = AudioPlayer()
+    // MARK: -- Actions:
+    @IBAction func openFileButtonAction(_ sender: NSButton) {
+        if selectedFile == nil {
+            selectedFile = selectFile()
         }
     }
     
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
+    @IBAction func playButtonAction(_ sender: NSButton) {
+        if let selectedFilename = selectedFile {
+            errorLabel.stringValue = ""
+            if let loadedPlayer = player {
+                loadedPlayer.isPlaying = true
+            } else {
+                player = AudioPlayer(filename: selectedFilename)
+                player?.initBeforePlaying()
+                player?.isPlaying = true
+            }
+        } else {
+            errorLabel.stringValue = "Open a file first"
+        }
+    }
+    
+    @IBAction func pauseButtonAction(_ sender: NSButton) {
+        guard let loadedPlayer = player else {return}
+        loadedPlayer.isPaused = !loadedPlayer.isPaused
+    }
+    
+    @IBAction func stopButtonAction(_ sender: NSButton) {
+        guard let loadedPlayer = player else {return}
+        loadedPlayer.isPlaying = false
+    }
+    
+    //MARK: -- Helper functions:
+    
+    func selectFile() -> URL? {
+        let openDialog = NSOpenPanel();
+        if (openDialog.runModal() == NSApplication.ModalResponse.OK) {
+            return openDialog.url!
+        } else {
+            // We'll handle it in another buttons.
+            return nil
         }
     }
     
@@ -53,5 +68,19 @@ class ViewController: NSViewController {
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
+    
+    //MARK: -- Overriden functions:
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        errorLabel.stringValue = ""
+    }
+    
+    override var representedObject: Any? {
+        didSet {
+        // Update the view, if already loaded.
+        }
+    }
+    
 }
-

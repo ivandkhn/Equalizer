@@ -17,17 +17,30 @@ class AudioPlayer {
         }
         set {
             toConsole("set to \(newValue)")
-            newValue ? player.play() : player.stop()
+            newValue ? player.play(from: 0) : player.stop()
         }
     }
     
+    var pauseTime: Double = 0
+    
+    // there's a bug in audioKit so that isPaused() is always false.
+    // so we have to handle own pause variable here
+    private var isTruePaused = false
+    
     var isPaused: Bool {
         get {
-            return player.isPaused
+            return isTruePaused
+            // return player.isPaused
         }
         set {
             toConsole("set to \(newValue)")
-            player.pause()
+            if newValue {
+                pauseTime = player.currentTime
+                player.pause()
+            } else {
+                player.play(from: pauseTime)
+            }
+            isTruePaused = newValue
         }
     }
     
@@ -45,10 +58,10 @@ class AudioPlayer {
     
     var samplesCount: Int64 = 0
 
-    init() {
+    init(filename: URL) {
         audioFile = nil
         do {
-            audioFile = try AKAudioFile(readFileName: "test3.wav")
+            audioFile = try AKAudioFile(forReading: filename)
         } catch  {
             print("Error while opening file")
             //TODO: show error in UI
@@ -64,13 +77,12 @@ class AudioPlayer {
         player = AKPlayer(audioFile: (audioFile!))
     }
     
-    func initBeforePlaying() -> Bool {
-        //let ringMod = AKRingModulator(player)
-        AudioKit.output = player //or = ringmod
+    func initBeforePlaying() { // -> Bool (to handle exceptions?)
+        // let effect = AKRingModulator()
+        AudioKit.output = player //or = effect
         
         player.isLooping = true
         try? AudioKit.start()
-        return true
     }
     
     func logAmplitudes(first: Int) {
