@@ -11,11 +11,39 @@ import Cocoa
 class ViewController: NSViewController {
     
     // MARK: -- UI elements:
-    @IBOutlet weak var errorLabel: NSTextField!
+    @IBOutlet weak var labelError: NSTextField!
+    @IBOutlet weak var buttonResetAllBands: NSButton!
+    @IBOutlet weak var sliderBand1: NSSlider!
+    @IBOutlet weak var sliderBand2: NSSlider!
+    @IBOutlet weak var sliderBand3: NSSlider!
+    @IBOutlet weak var sliderBand4: NSSlider!
+    @IBOutlet weak var sliderBand5: NSSlider!
+    @IBOutlet weak var sliderBand6: NSSlider!
+    @IBOutlet weak var sliderBand7: NSSlider!
+    @IBOutlet weak var sliderBand8: NSSlider!
+    
+    var slidersAll: [NSSlider]? = nil {
+        didSet {
+            if let initilized = slidersAll {
+                toConsole("created \(initilized.count) UI bands")
+            }
+        }
+    }
     
     // MARK: -- Model elements:
     var player: AudioPlayer?
     var selectedFile: URL? = nil
+    /*
+     (0, 100)
+     (100, 300)
+     (300, 700)
+     (700, 1500)
+     (1500, 3100)
+     (3100, 6300)
+     (6300, 12700)
+     (12700, 25500)
+     */
+    var initialBands = [0, 100, 300, 700, 1500, 3100, 6300, 12700, 20000]
     
     // MARK: -- Actions:
     @IBAction func openFileButtonAction(_ sender: NSButton) {
@@ -26,7 +54,7 @@ class ViewController: NSViewController {
     
     @IBAction func playButtonAction(_ sender: NSButton) {
         if let selectedFilename = selectedFile {
-            errorLabel.stringValue = ""
+            labelError.stringValue = ""
             if let loadedPlayer = player {
                 loadedPlayer.isPlaying = true
             } else {
@@ -35,8 +63,15 @@ class ViewController: NSViewController {
                 player?.isPlaying = true
             }
         } else {
-            errorLabel.stringValue = "Open a file first"
+            labelError.stringValue = "Open a file first"
         }
+    }
+    
+    @IBAction func buttonResetAllAction(_ sender: NSButton) {
+        for item in slidersAll! {
+            item.integerValue = 0
+        }
+        //TODO: recalculate filters as well, not only gui change.
     }
     
     @IBAction func pauseButtonAction(_ sender: NSButton) {
@@ -50,7 +85,6 @@ class ViewController: NSViewController {
     }
     
     //MARK: -- Helper functions:
-    
     func selectFile() -> URL? {
         let openDialog = NSOpenPanel();
         if (openDialog.runModal() == NSApplication.ModalResponse.OK) {
@@ -70,11 +104,17 @@ class ViewController: NSViewController {
     }
     
     //MARK: -- Overriden functions:
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        errorLabel.stringValue = ""
+        slidersAll = [
+            sliderBand1, sliderBand2, sliderBand3, sliderBand4,
+            sliderBand5, sliderBand6, sliderBand7, sliderBand8
+        ]
+        labelError.stringValue = ""
+        
+        //TODO: take bands labels from [initialBands]
+        
     }
     
     override var representedObject: Any? {
@@ -82,5 +122,4 @@ class ViewController: NSViewController {
         // Update the view, if already loaded.
         }
     }
-    
 }
