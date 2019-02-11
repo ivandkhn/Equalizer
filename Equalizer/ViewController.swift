@@ -31,19 +31,8 @@ class ViewController: NSViewController {
     }
     
     // MARK: -- Model elements:
-    var player: AudioPlayer?
+    var player: PlaybackEngine?
     var selectedFile: URL? = nil
-    /*
-     (0, 100)
-     (100, 300)
-     (300, 700)
-     (700, 1500)
-     (1500, 3100)
-     (3100, 6300)
-     (6300, 12700)
-     (12700, 25500)
-     */
-    var initialBands = [0, 100, 300, 700, 1500, 3100, 6300, 12700, 20000]
     
     // MARK: -- Actions:
     @IBAction func openFileButtonAction(_ sender: NSButton) {
@@ -58,7 +47,7 @@ class ViewController: NSViewController {
             if let loadedPlayer = player {
                 loadedPlayer.isPlaying = true
             } else {
-                player = AudioPlayer(filename: selectedFilename)
+                player = PlaybackEngine(filename: selectedFilename)
                 player?.initBeforePlaying()
                 player?.isPlaying = true
             }

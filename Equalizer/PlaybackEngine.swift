@@ -9,7 +9,7 @@
 import Foundation
 import AudioKit
 
-class AudioPlayer {
+class PlaybackEngine {
     
     var isPlaying: Bool {
         get {

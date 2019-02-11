@@ -13,9 +13,10 @@
 		9945A89621D3C2DA00D2EA55 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9945A89421D3C2DA00D2EA55 /* Main.storyboard */; };
 		996373FB21EE15E100C01C9A /* test3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 996373FA21EE15E100C01C9A /* test3.wav */; };
 		997AED6F21DEB1490050A0AA /* test2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 997AED6E21DEB1490050A0AA /* test2.wav */; };
-		9982C4E521DE09C3009FA36A /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982C4E421DE09C3009FA36A /* AudioPlayer.swift */; };
+		9982C4E521DE09C3009FA36A /* PlaybackEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982C4E421DE09C3009FA36A /* PlaybackEngine.swift */; };
 		9982C4F021DE0ED8009FA36A /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9982C4EE21DE0ED8009FA36A /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9982C4F521DE1308009FA36A /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9982C4F421DE1307009FA36A /* test.wav */; };
+		99C05A0B2211FF05000CE4C5 /* AudioMixer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C05A0A2211FF05000CE4C5 /* AudioMixer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,9 +43,10 @@
 		9945A89821D3C2DA00D2EA55 /* Equalizer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Equalizer.entitlements; sourceTree = "<group>"; };
 		996373FA21EE15E100C01C9A /* test3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test3.wav; sourceTree = "<group>"; };
 		997AED6E21DEB1490050A0AA /* test2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test2.wav; sourceTree = "<group>"; };
-		9982C4E421DE09C3009FA36A /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		9982C4E421DE09C3009FA36A /* PlaybackEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackEngine.swift; sourceTree = "<group>"; };
 		9982C4EE21DE0ED8009FA36A /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 		9982C4F421DE1307009FA36A /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
+		99C05A0A2211FF05000CE4C5 /* AudioMixer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMixer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,14 +81,14 @@
 		9945A88D21D3C2D600D2EA55 /* Equalizer */ = {
 			isa = PBXGroup;
 			children = (
+				99C05A0C2211FF1E000CE4C5 /* Supporting files */,
 				996373FC21EE168500C01C9A /* Audio Files */,
-				9945A88E21D3C2D600D2EA55 /* AppDelegate.swift */,
 				9945A89021D3C2D700D2EA55 /* ViewController.swift */,
-				9982C4E421DE09C3009FA36A /* AudioPlayer.swift */,
-				9945A89221D3C2DA00D2EA55 /* Assets.xcassets */,
+				9982C4E421DE09C3009FA36A /* PlaybackEngine.swift */,
+				99C05A0A2211FF05000CE4C5 /* AudioMixer.swift */,
 				9945A89421D3C2DA00D2EA55 /* Main.storyboard */,
-				9945A89721D3C2DA00D2EA55 /* Info.plist */,
 				9945A89821D3C2DA00D2EA55 /* Equalizer.entitlements */,
+				9945A89721D3C2DA00D2EA55 /* Info.plist */,
 			);
 			path = Equalizer;
 			sourceTree = "<group>";
@@ -106,6 +108,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		99C05A0C2211FF1E000CE4C5 /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				9945A88E21D3C2D600D2EA55 /* AppDelegate.swift */,
+				9945A89221D3C2DA00D2EA55 /* Assets.xcassets */,
+			);
+			path = "Supporting files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -183,9 +194,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99C05A0B2211FF05000CE4C5 /* AudioMixer.swift in Sources */,
 				9945A89121D3C2D700D2EA55 /* ViewController.swift in Sources */,
 				9945A88F21D3C2D700D2EA55 /* AppDelegate.swift in Sources */,
-				9982C4E521DE09C3009FA36A /* AudioPlayer.swift in Sources */,
+				9982C4E521DE09C3009FA36A /* PlaybackEngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
