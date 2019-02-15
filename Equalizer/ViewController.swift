@@ -11,8 +11,6 @@ import Cocoa
 class ViewController: NSViewController {
     
     // MARK: -- UI elements:
-    @IBOutlet weak var labelError: NSTextField!
-    @IBOutlet weak var buttonResetAllBands: NSButton!
     @IBOutlet weak var sliderBand1: NSSlider!
     @IBOutlet weak var sliderBand2: NSSlider!
     @IBOutlet weak var sliderBand3: NSSlider!
@@ -21,6 +19,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var sliderBand6: NSSlider!
     @IBOutlet weak var sliderBand7: NSSlider!
     @IBOutlet weak var sliderBand8: NSSlider!
+    @IBOutlet weak var progressBarPlayingStatus: NSProgressIndicator!
     
     var slidersAll: [NSSlider]? = nil {
         didSet {
@@ -43,7 +42,6 @@ class ViewController: NSViewController {
     
     @IBAction func playButtonAction(_ sender: NSButton) {
         if let selectedFilename = selectedFile {
-            labelError.stringValue = ""
             if let loadedPlayer = player {
                 loadedPlayer.isPlaying = true
             } else {
@@ -52,7 +50,7 @@ class ViewController: NSViewController {
                 player?.isPlaying = true
             }
         } else {
-            labelError.stringValue = "Open a file first"
+            _ = showAlert(withText: "Unable to start playing: no file opened")
         }
     }
     
@@ -74,6 +72,14 @@ class ViewController: NSViewController {
     }
     
     //MARK: -- Helper functions:
+    func showAlert(withText text: String) -> Bool {
+        let alert = NSAlert()
+        alert.messageText = text
+        alert.addButton(withTitle: "OK")
+        alert.alertStyle = .critical
+        return alert.runModal() == .alertFirstButtonReturn
+    }
+    
     func selectFile() -> URL? {
         let openDialog = NSOpenPanel();
         if (openDialog.runModal() == NSApplication.ModalResponse.OK) {
@@ -100,8 +106,6 @@ class ViewController: NSViewController {
             sliderBand1, sliderBand2, sliderBand3, sliderBand4,
             sliderBand5, sliderBand6, sliderBand7, sliderBand8
         ]
-        labelError.stringValue = ""
-        
         //TODO: take bands labels from [initialBands]
         
     }
