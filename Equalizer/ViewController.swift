@@ -11,29 +11,61 @@ import Cocoa
 class ViewController: NSViewController {
     
     // MARK: -- UI elements:
-    @IBOutlet weak var sliderBand1: NSSlider!
-    @IBOutlet weak var sliderBand2: NSSlider!
-    @IBOutlet weak var sliderBand3: NSSlider!
-    @IBOutlet weak var sliderBand4: NSSlider!
-    @IBOutlet weak var sliderBand5: NSSlider!
-    @IBOutlet weak var sliderBand6: NSSlider!
-    @IBOutlet weak var sliderBand7: NSSlider!
-    @IBOutlet weak var sliderBand8: NSSlider!
     @IBOutlet weak var progressBarPlayingStatus: NSProgressIndicator!
-    
-    var slidersAll: [NSSlider]? = nil {
-        didSet {
-            if let initilized = slidersAll {
-                toConsole("created \(initilized.count) UI bands")
-            }
-        }
-    }
     
     // MARK: -- Model elements:
     var player: PlaybackEngine?
-    var selectedFile: URL? = nil
+    var selectedFile: URL? {
+        willSet {
+            toConsole("file selected: \(newValue?.absoluteString ?? "nil")")
+        }
+    }
+    var slidersCount = 8
     
     // MARK: -- Actions:
+    @IBAction func EQsliderMovedAction(_ sender: NSSlider) {
+        // NB: this func is not called when buttonResetAllAction is called
+        let bandNumber = sender.tag - 100
+        let newValue = sender.doubleValue
+        
+        toConsole("received band #\(bandNumber) change to \(newValue)")
+        //player.changeParameter(of: NSSlider, index: bandNumber, to: newValue)
+    }
+    
+    //e0p1 = effect #0, parameter #1
+    @IBAction func effectSliderMovedAction(_ sender: NSSlider) {
+        guard let identifier = sender.identifier?.rawValue else {
+            toConsole("invalid identifier")
+            return
+        }
+        let effectNumberIndexPosition = identifier.index(
+            identifier.startIndex, offsetBy: 1
+        )
+        let parameterIndexPosition = identifier.index(
+            identifier.startIndex, offsetBy: 3
+        )
+        let effectNumber = identifier[effectNumberIndexPosition]
+        let parameterNumber = identifier[parameterIndexPosition]
+        let newValue = sender.doubleValue
+        
+        toConsole("received e\(effectNumber) p\(parameterNumber) -> \(newValue)")
+    }
+    
+    @IBAction func toggleEffectAction(_ sender: NSButton) {
+        guard let identifier = sender.identifier?.rawValue else {
+            toConsole("invalid identifier")
+            return
+        }
+        let effectNumberIndexPosition = identifier.index(
+            identifier.startIndex, offsetBy: 1
+        )
+        let effectNumber = identifier[effectNumberIndexPosition]
+        let newValue = sender.doubleValue
+        
+        toConsole("received e\(effectNumber) toggled to \(newValue)")
+    }
+    
+    
     @IBAction func openFileButtonAction(_ sender: NSButton) {
         if selectedFile == nil {
             selectedFile = selectFile()
@@ -55,8 +87,10 @@ class ViewController: NSViewController {
     }
     
     @IBAction func buttonResetAllAction(_ sender: NSButton) {
-        for item in slidersAll! {
-            item.integerValue = 0
+        for i in 0..<slidersCount {
+            if let slider = self.view.viewWithTag(i + 100) as? NSSlider {
+                slider.integerValue = 0
+            }
         }
         //TODO: recalculate filters as well, not only gui change.
     }
@@ -90,29 +124,8 @@ class ViewController: NSViewController {
         }
     }
     
-    func displayAlert(text: String) {
-        let alert = NSAlert.init()
-        alert.messageText = "Alert"
-        alert.informativeText = text
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
-    
     //MARK: -- Overriden functions:
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        slidersAll = [
-            sliderBand1, sliderBand2, sliderBand3, sliderBand4,
-            sliderBand5, sliderBand6, sliderBand7, sliderBand8
-        ]
-        //TODO: take bands labels from [initialBands]
-        
-    }
-    
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
     }
 }
