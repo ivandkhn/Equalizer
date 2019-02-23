@@ -29,7 +29,7 @@ class ViewController: NSViewController {
         let newValue = sender.doubleValue
         
         toConsole("received band #\(bandNumber) change to \(newValue)")
-        //player.changeParameter(of: NSSlider, index: bandNumber, to: newValue)
+        player?.modifyParameter(ofBand: bandNumber, to: newValue)
     }
     
     //e0p1 = effect #0, parameter #1

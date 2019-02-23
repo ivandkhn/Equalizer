@@ -9,7 +9,16 @@
 import Foundation
 import AudioKit
 
+// pre-defined filtering parameters.
+var initialEqualizerBands: [Double] = [100, 300, 700, 1500, 3100, 6300, 12700]
+var bandsAmount = initialEqualizerBands.count + 1
+let xFadeFactor = 0.1
+
 class PlaybackEngine {
+    var LPFilter = AKLowPassButterworthFilter()
+    var BPFilters = [AKBandPassButterworthFilter]()
+    var HPFilter = AKHighPassFilter()
+    var gainControllers = [AKBooster]()
     
     var isPlaying: Bool {
         get {
@@ -77,12 +86,41 @@ class PlaybackEngine {
         player = AKPlayer(audioFile: (audioFile!))
     }
     
-    func initBeforePlaying() { // -> Bool (to handle exceptions?)
-        // let effect = AKRingModulator()
-        AudioKit.output = player //or = effect
+    func initBeforePlaying() {
+        // TODO: move caller to viewDidLoad.
+        BPFilters = getMiddleFiltersInstances(
+            inputNode: player, bands: initialEqualizerBands
+        )
+        LPFilter = AKLowPassButterworthFilter(
+            player, cutoffFrequency: initialEqualizerBands[0]
+        )
+        HPFilter = AKHighPassFilter(
+            player,
+            cutoffFrequency: initialEqualizerBands[initialEqualizerBands.count-1]
+        )
         
+        //attach all nodes together
+        var allEQs = [AKNode]()
+        allEQs.append(LPFilter)
+        allEQs.append(contentsOf: BPFilters)
+        allEQs.append(HPFilter)
+        gainControllers = getGainControllerInstances(inputNode: allEQs)
+        let finalMixer = AKMixer(gainControllers)
+        AudioKit.output = finalMixer
         player.isLooping = true
         try? AudioKit.start()
+    }
+    
+    func modifyParameter(ofBand index: Int, to value: Double) {
+        gainControllers[index].dB = value
+    }
+    
+    func modifyParameter(ofEffect eN: Int, ofParameter pN: Int, to: Double) {
+        // TODO
+    }
+    
+    func modifyParameter(ofEffect eN: Int, enabled: Bool) {
+        // TODO
     }
     
     func logAmplitudes(first: Int) {
@@ -97,4 +135,31 @@ class PlaybackEngine {
 
 public func toConsole(_ message: Any?, function: String = #function ) {
     print("[\(function)] \(message ?? "nil message")")
+}
+
+func getMiddleFiltersInstances(inputNode: AKPlayer, bands: [Double]) -> [AKBandPassButterworthFilter] {
+    var buffer = [AKBandPassButterworthFilter]()
+    for index in 0..<bands.count - 1 {
+        let current = bands[index]
+        let next = bands[index+1]
+        let center = (current + next)/2
+        let bw = (next - current) * (1 + xFadeFactor)
+        let filter = AKBandPassButterworthFilter(
+            inputNode,
+            centerFrequency: center,
+            bandwidth: bw
+        )
+        buffer.append(filter)
+        toConsole("added BP filter: center: \(center), bw: \(bw)")
+    }
+    return buffer;
+}
+
+func getGainControllerInstances(inputNode: [AKNode]) -> [AKBooster] {
+    var buffer = [AKBooster]()
+    for node in inputNode {
+        let gainController = AKBooster(node, gain: 1.0)
+        buffer.append(gainController)
+    }
+    return buffer
 }

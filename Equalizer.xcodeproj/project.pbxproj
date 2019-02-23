@@ -16,7 +16,6 @@
 		9982C4E521DE09C3009FA36A /* PlaybackEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982C4E421DE09C3009FA36A /* PlaybackEngine.swift */; };
 		9982C4F021DE0ED8009FA36A /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9982C4EE21DE0ED8009FA36A /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9982C4F521DE1308009FA36A /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9982C4F421DE1307009FA36A /* test.wav */; };
-		99C05A0B2211FF05000CE4C5 /* AudioMixer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C05A0A2211FF05000CE4C5 /* AudioMixer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,7 +45,6 @@
 		9982C4E421DE09C3009FA36A /* PlaybackEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackEngine.swift; sourceTree = "<group>"; };
 		9982C4EE21DE0ED8009FA36A /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 		9982C4F421DE1307009FA36A /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
-		99C05A0A2211FF05000CE4C5 /* AudioMixer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMixer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +83,6 @@
 				996373FC21EE168500C01C9A /* Audio Files */,
 				9945A89021D3C2D700D2EA55 /* ViewController.swift */,
 				9982C4E421DE09C3009FA36A /* PlaybackEngine.swift */,
-				99C05A0A2211FF05000CE4C5 /* AudioMixer.swift */,
 				9945A89421D3C2DA00D2EA55 /* Main.storyboard */,
 				9945A89821D3C2DA00D2EA55 /* Equalizer.entitlements */,
 				9945A89721D3C2DA00D2EA55 /* Info.plist */,
@@ -153,6 +150,11 @@
 					9945A88A21D3C2D600D2EA55 = {
 						CreatedOnToolsVersion = 9.4;
 						LastSwiftMigration = 1010;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -194,7 +196,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				99C05A0B2211FF05000CE4C5 /* AudioMixer.swift in Sources */,
 				9945A89121D3C2D700D2EA55 /* ViewController.swift in Sources */,
 				9945A88F21D3C2D700D2EA55 /* AppDelegate.swift in Sources */,
 				9982C4E521DE09C3009FA36A /* PlaybackEngine.swift in Sources */,
@@ -332,7 +333,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Equalizer/Equalizer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = LX483546M4;
@@ -356,7 +356,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Equalizer/Equalizer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = LX483546M4;
