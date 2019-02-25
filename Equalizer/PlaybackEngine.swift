@@ -20,6 +20,9 @@ class PlaybackEngine {
     var HPFilter = AKHighPassFilter()
     var gainControllers = [AKBooster]()
     
+    // Effects:
+    var distortionEffect = Distortion()
+    
     var isPlaying: Bool {
         get {
             return player.isPlaying
@@ -106,7 +109,8 @@ class PlaybackEngine {
         allEQs.append(HPFilter)
         gainControllers = getGainControllerInstances(inputNode: allEQs)
         let finalMixer = AKMixer(gainControllers)
-        AudioKit.output = finalMixer
+        distortionEffect = Distortion(finalMixer, gain: 1)
+        AudioKit.output = distortionEffect
         player.isLooping = true
         try? AudioKit.start()
     }
@@ -115,8 +119,8 @@ class PlaybackEngine {
         gainControllers[index].dB = value
     }
     
-    func modifyParameter(ofEffect eN: Int, ofParameter pN: Int, to: Double) {
-        // TODO
+    func modifyParameter(ofEffect eN: Int, ofParameter pN: Int, to value: Double) {
+        // distortionEffect.gain = value
     }
     
     func modifyParameter(ofEffect eN: Int, enabled: Bool) {
