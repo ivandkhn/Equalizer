@@ -22,6 +22,12 @@ class PlaybackEngine {
     var allEQs = [AKNode]()
     var gainControllers = [AKBooster]()
     var distortionEffect = Distortion()
+    //var chorusEffect = Chorus()
+    var allEffects = [AKNode]()
+    var distortionMixer = AKDryWetMixer()
+    //var chorusMizer = AKDryWetMixer()
+    var allDryWetMixers = [AKDryWetMixer]()
+    var afterEQMixer = AKMixer()
     var finalMixer = AKMixer()
     
     var isPlaying: Bool {
@@ -77,7 +83,6 @@ class PlaybackEngine {
             audioFile = try AKAudioFile(forReading: filename)
         } catch  {
             print("Error while opening file")
-            //TODO: show error in UI
         }
         samplesCount = audioFile?.samplesCount ?? 0
         toConsole("Loaded file with \(samplesCount) samples.")
@@ -107,32 +112,42 @@ class PlaybackEngine {
         allEQs.append(contentsOf: BPFilters)
         allEQs.append(HPFilter)
         gainControllers = getGainControllerInstances(inputNode: allEQs)
-        finalMixer = AKMixer(gainControllers)
-        distortionEffect = Distortion(finalMixer, gain: 0.5)
-        AudioKit.output = distortionEffect
+        afterEQMixer = AKMixer(gainControllers)
+        
+        distortionEffect = Distortion(afterEQMixer, gain: 0.5)
+        allEffects.append(distortionEffect)
+        // full effect mix
+        distortionMixer = AKDryWetMixer(afterEQMixer, distortionEffect, balance: 0)
+        allDryWetMixers.append(distortionMixer)
+        for mixer in allDryWetMixers {
+            mixer.connect(to: finalMixer)
+        }
+        AudioKit.output = finalMixer
         player.isLooping = true
         try? AudioKit.start()
     }
     
+    //MARK: -- parameters modification
     func modifyParameter(ofBand index: Int, to value: Double) {
         gainControllers[index].dB = value
     }
     
     func modifyParameter(ofEffect eN: Int, ofParameter pN: Int, to value: Double) {
-        // distortionEffect.gain = value
-    }
-    
-    func modifyParameter(ofEffect eN: Int, enabled: Bool) {
-        // TODO
-    }
-    
-    func logAmplitudes(first: Int) {
-        var index = first
-        if index > samplesCount {
-            toConsole("index > samplesCount. Setting index = samplesCount")
-            index = Int(samplesCount)
+        if (pN == 1) {
+            modifyParameter(ofEffect: eN, dryWetBalance: value)
+            return
         }
-        toConsole(audioFile?.floatChannelData![0][0..<index])
+        switch eN {
+        case 0:
+            let effect = allEffects[0] as? Distortion
+            effect?.gain = value
+        default:
+            toConsole("default case!")
+        }
+    }
+    
+    func modifyParameter(ofEffect eN: Int, dryWetBalance: Double) {
+        allDryWetMixers[eN].balance = dryWetBalance
     }
 }
 

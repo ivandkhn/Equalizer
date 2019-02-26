@@ -1159,7 +1159,7 @@
                                         <slider identifier="e0p1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SnV-8Y-W6l">
                                             <rect key="frame" x="126" y="18" width="127" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="3Ir-4T-psA"/>
+                                            <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="3Ir-4T-psA"/>
                                             <connections>
                                                 <action selector="effectSliderMovedAction:" target="XfG-lQ-9wD" id="NCG-pJ-PdM"/>
                                             </connections>
@@ -1189,15 +1189,15 @@
                                         <slider identifier="e0p0" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4f8-Yy-iyS">
                                             <rect key="frame" x="126" y="53" width="127" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="31e-pI-IWy"/>
+                                            <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="31e-pI-IWy"/>
                                             <connections>
                                                 <action selector="effectSliderMovedAction:" target="XfG-lQ-9wD" id="c6y-AF-HCO"/>
                                             </connections>
                                         </slider>
                                         <button identifier="e0" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZUU-Pq-f1h">
-                                            <rect key="frame" x="100" y="98" width="55" height="18"/>
+                                            <rect key="frame" x="100" y="98" width="82" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Choir" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ylh-9d-UIi">
+                                            <buttonCell key="cell" type="check" title="Distortion" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ylh-9d-UIi">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1208,7 +1208,7 @@
                                         <slider identifier="e1p1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uZg-nN-ac8">
                                             <rect key="frame" x="402" y="18" width="127" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="au5-y3-7Ea"/>
+                                            <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="au5-y3-7Ea"/>
                                             <connections>
                                                 <action selector="effectSliderMovedAction:" target="XfG-lQ-9wD" id="peJ-g8-mCc"/>
                                             </connections>
@@ -1234,15 +1234,15 @@
                                         <slider identifier="e1p0" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V7z-ab-AaY">
                                             <rect key="frame" x="402" y="53" width="127" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="FKS-5q-E7n"/>
+                                            <sliderCell key="cell" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="FKS-5q-E7n"/>
                                             <connections>
                                                 <action selector="effectSliderMovedAction:" target="XfG-lQ-9wD" id="WQT-ya-tQQ"/>
                                             </connections>
                                         </slider>
                                         <button identifier="e1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oxR-nf-eJk">
-                                            <rect key="frame" x="376" y="98" width="82" height="18"/>
+                                            <rect key="frame" x="376" y="98" width="66" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Distortion" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Kq9-l2-lHv">
+                                            <buttonCell key="cell" type="check" title="Chorus" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Kq9-l2-lHv">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>

@@ -83,7 +83,7 @@ void DistortionDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount buff
             
             float limit = _private->leftGainRamp.getValue();
             
-            
+            /*
             float x = *in;
             if (x >= limit) {
                 x = limit;
@@ -91,10 +91,9 @@ void DistortionDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount buff
                 x = -limit;
             }
             *out = x;
-             
-            
-            /*
-            *in *= (0.7 + limit);
+             */
+        
+            *in *= (1 + limit);
             if (*in > 1) {
                 *out = 1;
             } else if (*in < -1) {
@@ -102,7 +101,6 @@ void DistortionDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount buff
             } else {
                 *out = *in;
             }
-             */
         }
     }
 }

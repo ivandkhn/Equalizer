@@ -44,11 +44,16 @@ class ViewController: NSViewController {
         let parameterIndexPosition = identifier.index(
             identifier.startIndex, offsetBy: 3
         )
-        let effectNumber = identifier[effectNumberIndexPosition]
-        let parameterNumber = identifier[parameterIndexPosition]
+        let effectNumber = Int(String(identifier[effectNumberIndexPosition]))!
+        let parameterNumber = Int(String(identifier[parameterIndexPosition]))!
         let newValue = sender.doubleValue
         
         toConsole("received e\(effectNumber) p\(parameterNumber) -> \(newValue)")
+        player?.modifyParameter(
+            ofEffect: effectNumber,
+            ofParameter: parameterNumber,
+            to: newValue
+        )
     }
     
     @IBAction func toggleEffectAction(_ sender: NSButton) {
@@ -59,10 +64,15 @@ class ViewController: NSViewController {
         let effectNumberIndexPosition = identifier.index(
             identifier.startIndex, offsetBy: 1
         )
-        let effectNumber = identifier[effectNumberIndexPosition]
+        let effectNumber = Int(String(identifier[effectNumberIndexPosition]))!
         let newValue = sender.doubleValue
         
         toConsole("received e\(effectNumber) toggled to \(newValue)")
+        player?.modifyParameter(
+            ofEffect: effectNumber,
+            ofParameter: 1,
+            to: newValue
+        )
     }
     
     
