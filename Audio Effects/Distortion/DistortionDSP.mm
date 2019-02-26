@@ -72,34 +72,12 @@ void DistortionDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount buff
         for (int channel = 0; channel < _nChannels; ++channel) {
             float *in  = (float *)_inBufferListPtr->mBuffers[channel].mData  + frameOffset;
             float *out = (float *)_outBufferListPtr->mBuffers[channel].mData + frameOffset;
-            
-            /*
-            if (channel == 0) {
-                *out = *in * _private->leftGainRamp.getValue();
-            } else {
-                *out = *in * _private->rightGainRamp.getValue();
-            }
-            */
-            
-            float limit = _private->leftGainRamp.getValue();
-            
-            /*
-            float x = *in;
-            if (x >= limit) {
-                x = limit;
-            } else if (x <= -limit) {
-                x = -limit;
-            }
-            *out = x;
-             */
         
-            *in *= (1 + limit);
-            if (*in > 1) {
+            *out = *in + _private->leftGainRamp.getValue();
+            if (*out > 1) {
                 *out = 1;
-            } else if (*in < -1) {
+            } else if (*out < -1) {
                 *out = -1;
-            } else {
-                *out = *in;
             }
         }
     }

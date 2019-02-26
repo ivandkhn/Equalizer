@@ -20,7 +20,7 @@ class PlaybackEngine {
     var BPFilters = [AKBandPassButterworthFilter]()
     var HPFilter = AKHighPassFilter()
     var allEQs = [AKNode]()
-    var gainControllers = [AKBooster]()
+    var gainControllers = [AKDryWetMixer]()
     var distortionEffect = Distortion()
     //var chorusEffect = Chorus()
     var allEffects = [AKNode]()
@@ -122,6 +122,7 @@ class PlaybackEngine {
         for mixer in allDryWetMixers {
             mixer.connect(to: finalMixer)
         }
+
         AudioKit.output = finalMixer
         player.isLooping = true
         try? AudioKit.start()
@@ -129,7 +130,7 @@ class PlaybackEngine {
     
     //MARK: -- parameters modification
     func modifyParameter(ofBand index: Int, to value: Double) {
-        gainControllers[index].dB = value
+        gainControllers[index].balance = (value+60) / 70
     }
     
     func modifyParameter(ofEffect eN: Int, ofParameter pN: Int, to value: Double) {
@@ -173,10 +174,11 @@ func getMiddleFiltersInstances(inputNode: AKPlayer, bands: [Double]) -> [AKBandP
     return buffer;
 }
 
-func getGainControllerInstances(inputNode: [AKNode]) -> [AKBooster] {
-    var buffer = [AKBooster]()
+func getGainControllerInstances(inputNode: [AKNode]) -> [AKDryWetMixer] {
+    var buffer = [AKDryWetMixer]()
+    let emptyNode = AKWhiteNoise(amplitude: 0)
     for node in inputNode {
-        let gainController = AKBooster(node, gain: 1.0)
+        let gainController = AKDryWetMixer(emptyNode, node, balance: 0.5)
         buffer.append(gainController)
     }
     return buffer
