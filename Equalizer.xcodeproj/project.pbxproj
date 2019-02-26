@@ -16,6 +16,9 @@
 		9982C4E521DE09C3009FA36A /* PlaybackEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9982C4E421DE09C3009FA36A /* PlaybackEngine.swift */; };
 		9982C4F021DE0ED8009FA36A /* AudioKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9982C4EE21DE0ED8009FA36A /* AudioKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9982C4F521DE1308009FA36A /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9982C4F421DE1307009FA36A /* test.wav */; };
+		99B431BA22247946007C73D7 /* DistortionDSP.mm in Sources */ = {isa = PBXBuildFile; fileRef = 99B431B622247945007C73D7 /* DistortionDSP.mm */; };
+		99B431BB22247946007C73D7 /* DistortionAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B431B722247946007C73D7 /* DistortionAudioUnit.swift */; };
+		99B431BC22247946007C73D7 /* Distortion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B431B922247946007C73D7 /* Distortion.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +48,11 @@
 		9982C4E421DE09C3009FA36A /* PlaybackEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackEngine.swift; sourceTree = "<group>"; };
 		9982C4EE21DE0ED8009FA36A /* AudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AudioKit.framework; sourceTree = "<group>"; };
 		9982C4F421DE1307009FA36A /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
+		99B431AC22247199007C73D7 /* Equalizer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Equalizer-Bridging-Header.h"; sourceTree = "<group>"; };
+		99B431B622247945007C73D7 /* DistortionDSP.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DistortionDSP.mm; sourceTree = "<group>"; };
+		99B431B722247946007C73D7 /* DistortionAudioUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistortionAudioUnit.swift; sourceTree = "<group>"; };
+		99B431B822247946007C73D7 /* DistortionDSP.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DistortionDSP.hpp; sourceTree = "<group>"; };
+		99B431B922247946007C73D7 /* Distortion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Distortion.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +69,8 @@
 		9945A88221D3C2D600D2EA55 = {
 			isa = PBXGroup;
 			children = (
+				99B431AD22247471007C73D7 /* Audio Effects */,
+				99B431AC22247199007C73D7 /* Equalizer-Bridging-Header.h */,
 				9982C4EE21DE0ED8009FA36A /* AudioKit.framework */,
 				9945A88D21D3C2D600D2EA55 /* Equalizer */,
 				9945A88C21D3C2D600D2EA55 /* Products */,
@@ -105,6 +115,33 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		998F8FEF222508F300F15808 /* Choir */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Choir;
+			sourceTree = "<group>";
+		};
+		99B431AD22247471007C73D7 /* Audio Effects */ = {
+			isa = PBXGroup;
+			children = (
+				998F8FEF222508F300F15808 /* Choir */,
+				99B431AE22247484007C73D7 /* Distortion */,
+			);
+			path = "Audio Effects";
+			sourceTree = "<group>";
+		};
+		99B431AE22247484007C73D7 /* Distortion */ = {
+			isa = PBXGroup;
+			children = (
+				99B431B922247946007C73D7 /* Distortion.swift */,
+				99B431B722247946007C73D7 /* DistortionAudioUnit.swift */,
+				99B431B822247946007C73D7 /* DistortionDSP.hpp */,
+				99B431B622247945007C73D7 /* DistortionDSP.mm */,
+			);
+			path = Distortion;
 			sourceTree = "<group>";
 		};
 		99C05A0C2211FF1E000CE4C5 /* Supporting files */ = {
@@ -198,6 +235,9 @@
 			files = (
 				9945A89121D3C2D700D2EA55 /* ViewController.swift in Sources */,
 				9945A88F21D3C2D700D2EA55 /* AppDelegate.swift in Sources */,
+				99B431BB22247946007C73D7 /* DistortionAudioUnit.swift in Sources */,
+				99B431BA22247946007C73D7 /* DistortionDSP.mm in Sources */,
+				99B431BC22247946007C73D7 /* Distortion.swift in Sources */,
 				9982C4E521DE09C3009FA36A /* PlaybackEngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,6 +380,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../AudioKit-4.5.5/AudioKit/Common/Internals/CoreAudio\"/**",
+					"\"$(SRCROOT)/../AudioKit-4.5.5/AudioKit/Common/Internals/Utilities\"/**",
+				);
 				INFOPLIST_FILE = Equalizer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -348,6 +392,7 @@
 				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = johndahrah.Equalizer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Equalizer-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
@@ -363,6 +408,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../AudioKit-4.5.5/AudioKit/Common/Internals/CoreAudio\"/**",
+					"\"$(SRCROOT)/../AudioKit-4.5.5/AudioKit/Common/Internals/Utilities\"/**",
+				);
 				INFOPLIST_FILE = Equalizer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -371,6 +420,7 @@
 				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = johndahrah.Equalizer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Equalizer-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;

@@ -1,25 +1,25 @@
 //
-//  AKBoosterDSP.mm
-//  AudioKit
+//  DistortionDSP.mm
+//  Equalizer
 //
-//  Created by Aurelius Prochazka, revision history on Github.
-//  Copyright © 2018 AudioKit. All rights reserved.
+//  Created by Иван Дахненко on 25/02/2019.
+//  Copyright © 2019 Ivan Dakhnenko. All rights reserved.
 //
 
 #include "DistortionDSP.hpp"
 
-extern "C" void *createBoosterDSP(int nChannels, double sampleRate) {
-    AKBoosterDSP *dsp = new AKBoosterDSP();
+extern "C" void *createDistortionDSP(int nChannels, double sampleRate) {
+    DistortionDSP *dsp = new DistortionDSP();
     dsp->init(nChannels, sampleRate);
     return dsp;
 }
 
-struct AKBoosterDSP::_Internal {
+struct DistortionDSP::_Internal {
     AKParameterRamp leftGainRamp;
     AKParameterRamp rightGainRamp;
 };
 
-AKBoosterDSP::AKBoosterDSP() : _private(new _Internal) {
+DistortionDSP::DistortionDSP() : _private(new _Internal) {
     _private->leftGainRamp.setTarget(1.0, true);
     _private->leftGainRamp.setDurationInSamples(10000);
     _private->rightGainRamp.setTarget(1.0, true);
@@ -27,19 +27,19 @@ AKBoosterDSP::AKBoosterDSP() : _private(new _Internal) {
 }
 
 // Uses the ParameterAddress as a key
-void AKBoosterDSP::setParameter(AUParameterAddress address, AUValue value, bool immediate) {
+void DistortionDSP::setParameter(AUParameterAddress address, AUValue value, bool immediate) {
     switch (address) {
-        case AKBoosterParameterLeftGain:
+        case DistortionParameterLeftGain:
             _private->leftGainRamp.setTarget(value, immediate);
             break;
-        case AKBoosterParameterRightGain:
+        case DistortionParameterRightGain:
             _private->rightGainRamp.setTarget(value, immediate);
             break;
-        case AKBoosterParameterRampDuration:
+        case DistortionParameterRampDuration:
             _private->leftGainRamp.setRampDuration(value, _sampleRate);
             _private->rightGainRamp.setRampDuration(value, _sampleRate);
             break;
-        case AKBoosterParameterRampType:
+        case DistortionParameterRampType:
             _private->leftGainRamp.setRampType(value);
             _private->rightGainRamp.setRampType(value);
             break;
@@ -47,20 +47,19 @@ void AKBoosterDSP::setParameter(AUParameterAddress address, AUValue value, bool 
 }
 
 // Uses the ParameterAddress as a key
-float AKBoosterDSP::getParameter(AUParameterAddress address) {
+float DistortionDSP::getParameter(AUParameterAddress address) {
     switch (address) {
-        case AKBoosterParameterLeftGain:
+        case DistortionParameterLeftGain:
             return _private->leftGainRamp.getTarget();
-        case AKBoosterParameterRightGain:
+        case DistortionParameterRightGain:
             return _private->rightGainRamp.getTarget();
-        case AKBoosterParameterRampDuration:
+        case DistortionParameterRampDuration:
             return _private->leftGainRamp.getRampDuration(_sampleRate);
     }
     return 0;
 }
 
-void AKBoosterDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset) {
-
+void DistortionDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset) {
     for (int frameIndex = 0; frameIndex < frameCount; ++frameIndex) {
         int frameOffset = int(frameIndex + bufferOffset);
         // do ramping every 8 samples
@@ -68,8 +67,8 @@ void AKBoosterDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount buffe
             _private->leftGainRamp.advanceTo(_now + frameOffset);
             _private->rightGainRamp.advanceTo(_now + frameOffset);
         }
-        // do actual signal processing
-        // After all this scaffolding, the only thing we are doing is scaling the input
+    
+        
         for (int channel = 0; channel < _nChannels; ++channel) {
             float *in  = (float *)_inBufferListPtr->mBuffers[channel].mData  + frameOffset;
             float *out = (float *)_outBufferListPtr->mBuffers[channel].mData + frameOffset;
@@ -84,6 +83,7 @@ void AKBoosterDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount buffe
             
             float limit = _private->leftGainRamp.getValue();
             
+            
             float x = *in;
             if (x >= limit) {
                 x = limit;
@@ -91,8 +91,18 @@ void AKBoosterDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount buffe
                 x = -limit;
             }
             *out = x;
+             
+            
+            /*
+            *in *= (0.7 + limit);
+            if (*in > 1) {
+                *out = 1;
+            } else if (*in < -1) {
+                *out = -1;
+            } else {
+                *out = *in;
+            }
+             */
         }
     }
-    
-    // TODO: normalize signal to 0dB
 }

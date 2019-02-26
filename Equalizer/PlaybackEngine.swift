@@ -15,13 +15,14 @@ var bandsAmount = initialEqualizerBands.count + 1
 let xFadeFactor = 0.1
 
 class PlaybackEngine {
+    // MARK: -- processing nodes
     var LPFilter = AKLowPassButterworthFilter()
     var BPFilters = [AKBandPassButterworthFilter]()
     var HPFilter = AKHighPassFilter()
+    var allEQs = [AKNode]()
     var gainControllers = [AKBooster]()
-    
-    // Effects:
     var distortionEffect = Distortion()
+    var finalMixer = AKMixer()
     
     var isPlaying: Bool {
         get {
@@ -90,7 +91,6 @@ class PlaybackEngine {
     }
     
     func initBeforePlaying() {
-        // TODO: move caller to viewDidLoad.
         BPFilters = getMiddleFiltersInstances(
             inputNode: player, bands: initialEqualizerBands
         )
@@ -103,13 +103,12 @@ class PlaybackEngine {
         )
         
         //attach all nodes together
-        var allEQs = [AKNode]()
         allEQs.append(LPFilter)
         allEQs.append(contentsOf: BPFilters)
         allEQs.append(HPFilter)
         gainControllers = getGainControllerInstances(inputNode: allEQs)
-        let finalMixer = AKMixer(gainControllers)
-        distortionEffect = Distortion(finalMixer, gain: 1)
+        finalMixer = AKMixer(gainControllers)
+        distortionEffect = Distortion(finalMixer, gain: 0.5)
         AudioKit.output = distortionEffect
         player.isLooping = true
         try? AudioKit.start()
@@ -147,7 +146,7 @@ func getMiddleFiltersInstances(inputNode: AKPlayer, bands: [Double]) -> [AKBandP
         let current = bands[index]
         let next = bands[index+1]
         let center = (current + next)/2
-        let bw = (next - current) * (1 + xFadeFactor)
+        let bw = floor((next - current) * (1 + xFadeFactor))
         let filter = AKBandPassButterworthFilter(
             inputNode,
             centerFrequency: center,

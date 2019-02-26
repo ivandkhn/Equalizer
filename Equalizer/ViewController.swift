@@ -69,16 +69,17 @@ class ViewController: NSViewController {
     @IBAction func openFileButtonAction(_ sender: NSButton) {
         if selectedFile == nil {
             selectedFile = selectFile()
+            guard let selectedFilename = selectedFile else {return}
+            player = PlaybackEngine(filename: selectedFilename)
+            player?.initBeforePlaying()
         }
     }
     
     @IBAction func playButtonAction(_ sender: NSButton) {
-        if let selectedFilename = selectedFile {
+        if selectedFile != nil {
             if let loadedPlayer = player {
                 loadedPlayer.isPlaying = true
             } else {
-                player = PlaybackEngine(filename: selectedFilename)
-                player?.initBeforePlaying()
                 player?.isPlaying = true
             }
         } else {

@@ -1,13 +1,11 @@
 //
-//  AKBooster.swift
-//  AudioKit
+//  Distortion.swift
+//  Equalizer
 //
-//  Created by Aurelius Prochazka, revision history on Github.
-//  Copyright © 2018 AudioKit. All rights reserved.
+//  Created by Иван Дахненко on 25/02/2019.
+//  Copyright © 2019 Ivan Dakhnenko. All rights reserved.
 //
 
-/// Stereo Booster
-///
 import AudioKit
 
 open class Distortion: AKNode, AKToggleable, AKComponent, AKInput {
@@ -111,7 +109,7 @@ open class Distortion: AKNode, AKToggleable, AKComponent, AKInput {
 
     // MARK: - Initialization
 
-    /// Initialize this booster node
+    /// Initialize this node
     ///
     /// - Parameters:
     ///   - input: AKNode whose output will be amplified

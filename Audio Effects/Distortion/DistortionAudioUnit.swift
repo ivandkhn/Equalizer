@@ -1,9 +1,9 @@
 //
 //  AKBoosterAudioUnit.swift
-//  AudioKit
+//  Equalizer
 //
-//  Created by Aurelius Prochazka, revision history on Github.
-//  Copyright © 2018 AudioKit. All rights reserved.
+//  Created by Иван Дахненко on 25/02/2019.
+//  Copyright © 2019 Ivan Dakhnenko. All rights reserved.
 //
 
 import AVFoundation
@@ -11,11 +11,11 @@ import AudioKit
 
 public class DistortionAudioUnit: AKAudioUnitBase {
 
-    func setParameter(_ address: AKBoosterParameter, value: Double) {
+    func setParameter(_ address: DistortionParameter, value: Double) {
         setParameterWithAddress(AUParameterAddress(address.rawValue), value: Float(value))
     }
 
-    func setParameterImmediately(_ address: AKBoosterParameter, value: Double) {
+    func setParameterImmediately(_ address: DistortionParameter, value: Double) {
         setParameterImmediatelyWithAddress(AUParameterAddress(address.rawValue), value: Float(value))
     }
 
@@ -39,7 +39,7 @@ public class DistortionAudioUnit: AKAudioUnitBase {
 
     public override func initDSP(withSampleRate sampleRate: Double,
                                  channelCount count: AVAudioChannelCount) -> UnsafeMutableRawPointer! {
-        return createBoosterDSP(Int32(count), sampleRate)
+        return createDistortionDSP(Int32(count), sampleRate)
     }
 
     public override init(componentDescription: AudioComponentDescription,

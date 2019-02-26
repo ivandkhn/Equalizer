@@ -1,5 +1,5 @@
 //
-//  Equalizer-Bridging-Header.h.h
+//  Equalizer-Bridging-Header.h
 //  Equalizer
 //
 //  Created by Иван Дахненко on 25/02/2019.

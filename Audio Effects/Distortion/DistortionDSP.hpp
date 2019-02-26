@@ -1,9 +1,9 @@
 //
-//  AKBoosterDSP.hpp
-//  AudioKit
+//  DistortionDSP.hpp
+//  Equalizer
 //
-//  Created by Aurelius Prochazka, revision history on Github.
-//  Copyright © 2018 AudioKit. All rights reserved.
+//  Created by Иван Дахненко on 25/02/2019.
+//  Copyright © 2019 Ivan Dakhnenko. All rights reserved.
 //
 
 #pragma once
@@ -12,16 +12,16 @@
 #import "AKParameterRamp.hpp"
 #import "AKExponentialParameterRamp.hpp" // to be deleted
 
-typedef NS_ENUM(AUParameterAddress, AKBoosterParameter) {
-    AKBoosterParameterLeftGain,
-    AKBoosterParameterRightGain,
-    AKBoosterParameterRampDuration,
-    AKBoosterParameterRampType
+typedef NS_ENUM(AUParameterAddress, DistortionParameter) {
+    DistortionParameterLeftGain,
+    DistortionParameterRightGain,
+    DistortionParameterRampDuration,
+    DistortionParameterRampType
 };
 
 #ifndef __cplusplus
 
-void *createBoosterDSP(int nChannels, double sampleRate);
+void *createDistortionDSP(int nChannels, double sampleRate);
 
 #else
 
@@ -34,14 +34,14 @@ void *createBoosterDSP(int nChannels, double sampleRate);
  etc.
  */
 
-struct AKBoosterDSP : AKDSPBase {
+struct DistortionDSP : AKDSPBase {
 
 private:
     struct _Internal;
     std::unique_ptr<_Internal> _private;
 
 public:
-    AKBoosterDSP();
+    DistortionDSP();
 
     void setParameter(AUParameterAddress address, float value, bool immediate) override;
     float getParameter(AUParameterAddress address) override;
