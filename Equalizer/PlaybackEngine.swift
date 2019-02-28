@@ -128,6 +128,11 @@ class PlaybackEngine {
         try? AudioKit.start()
     }
     
+    func getRawData() -> [Float] {
+        let frame = Int(player.currentFrame);
+        return Array((audioFile?.floatChannelData![0][frame...frame+1024])!)
+    }
+    
     //MARK: -- parameters modification
     func modifyParameter(ofBand index: Int, to value: Double) {
         gainControllers[index].balance = (value+60) / 70

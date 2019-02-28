@@ -707,11 +707,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Equalizer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="875" height="707"/>
+                        <rect key="frame" x="0.0" y="0.0" width="875" height="736"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <box fixedFrame="YES" title="Equalizer bands" translatesAutoresizingMaskIntoConstraints="NO" id="aMv-XI-5NE">
-                                <rect key="frame" x="17" y="258" width="841" height="270"/>
+                                <rect key="frame" x="17" y="287" width="841" height="270"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="xOv-sO-wNg">
                                     <rect key="frame" x="3" y="3" width="835" height="252"/>
@@ -1092,7 +1092,7 @@
                                 </view>
                             </box>
                             <box fixedFrame="YES" title="File controls" translatesAutoresizingMaskIntoConstraints="NO" id="Lc9-zh-hir">
-                                <rect key="frame" x="17" y="543" width="286" height="144"/>
+                                <rect key="frame" x="17" y="572" width="286" height="144"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="4Qb-Re-Vli">
                                     <rect key="frame" x="3" y="3" width="280" height="126"/>
@@ -1150,7 +1150,7 @@
                                 </view>
                             </box>
                             <box fixedFrame="YES" title="Effects controls" translatesAutoresizingMaskIntoConstraints="NO" id="mSP-CG-zt0">
-                                <rect key="frame" x="305" y="543" width="553" height="144"/>
+                                <rect key="frame" x="305" y="572" width="553" height="144"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="T95-4Y-9tT">
                                     <rect key="frame" x="3" y="3" width="547" height="126"/>
@@ -1253,23 +1253,28 @@
                                     </subviews>
                                 </view>
                             </box>
-                            <box fixedFrame="YES" title="Spectrums" translatesAutoresizingMaskIntoConstraints="NO" id="erp-9z-UW5">
-                                <rect key="frame" x="17" y="16" width="841" height="232"/>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5t4-Ou-KYO" customClass="FFTView" customModule="Equalizer" customModuleProvider="target">
+                                <rect key="frame" x="20" y="43" width="400" height="240"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <view key="contentView" id="H2K-yy-o76">
-                                    <rect key="frame" x="3" y="3" width="835" height="214"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                </view>
-                            </box>
+                            </customView>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="krt-FW-nYH">
+                                <rect key="frame" x="18" y="18" width="404" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="FiC-ll-ili"/>
+                                <connections>
+                                    <action selector="inputFFTSliderAction:" target="XfG-lQ-9wD" id="Saf-sX-DvJ"/>
+                                </connections>
+                            </slider>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="FFTIInputView" destination="5t4-Ou-KYO" id="sOW-nA-luL"/>
                         <outlet property="progressBarPlayingStatus" destination="vfb-uH-zDS" id="mg5-lz-yyR"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75.5" y="917.5"/>
+            <point key="canvasLocation" x="75.5" y="932"/>
         </scene>
     </scenes>
 </document>

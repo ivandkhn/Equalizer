@@ -10,8 +10,10 @@ import Cocoa
 
 class ViewController: NSViewController {
     
-    // MARK: -- UI elements:
+    // MARK: -- UI-dependent elements:
     @IBOutlet weak var progressBarPlayingStatus: NSProgressIndicator!
+    @IBOutlet weak var FFTIInputView: FFTView!
+    var timer = Timer()
     
     // MARK: -- Model elements:
     var player: PlaybackEngine?
@@ -21,6 +23,7 @@ class ViewController: NSViewController {
         }
     }
     var slidersCount = 8
+    var fftEngine = TempiFFT(withSize: 1024, sampleRate: 44100)
     
     // MARK: -- Actions:
     @IBAction func EQsliderMovedAction(_ sender: NSSlider) {
@@ -75,14 +78,11 @@ class ViewController: NSViewController {
         )
     }
     
-    
     @IBAction func openFileButtonAction(_ sender: NSButton) {
-        if selectedFile == nil {
-            selectedFile = selectFile()
-            guard let selectedFilename = selectedFile else {return}
-            player = PlaybackEngine(filename: selectedFilename)
-            player?.initBeforePlaying()
-        }
+        selectedFile = selectFile()
+        guard let selectedFilename = selectedFile else {return}
+        player = PlaybackEngine(filename: selectedFilename)
+        player?.initBeforePlaying()
     }
     
     @IBAction func playButtonAction(_ sender: NSButton) {
@@ -92,6 +92,8 @@ class ViewController: NSViewController {
             } else {
                 player?.isPlaying = true
             }
+            fftEngine.windowType = TempiFFTWindowType.hanning
+            scheduleFFTViewUpdateTimer()
         } else {
             _ = showAlert(withText: "Unable to start playing: no file opened")
         }
@@ -116,7 +118,32 @@ class ViewController: NSViewController {
         loadedPlayer.isPlaying = false
     }
     
+    @IBAction func inputFFTSliderAction(_ sender: NSSlider) {
+        FFTIInputView.lowDBGainOffset = sender.floatValue
+    }
+    
     //MARK: -- Helper functions:
+    func scheduleFFTViewUpdateTimer(){
+        timer = Timer.scheduledTimer(timeInterval: 0.1,
+                                     target: self,
+                                     selector: #selector(self.updateFFTView),
+                                     userInfo: nil, repeats: true)
+    }
+       
+    @objc func updateFFTView(){
+        fftEngine.fftForward((player?.getRawData())!)
+        fftEngine.calculateLogarithmicBands(minFrequency: 20,
+                                            maxFrequency: 20000,
+                                            bandsPerOctave: 40)
+        var data = fftEngine.bandMagnitudes
+        for i in (data?.indices)! {
+            data![i] = TempiFFT.toDB(data![i])
+        }
+        FFTIInputView.data = data!
+        FFTIInputView.setNeedsDisplay(NSRect(x: 0, y: 0,
+                                             width: 400, height: 240))
+    }
+    
     func showAlert(withText text: String) -> Bool {
         let alert = NSAlert()
         alert.messageText = text
