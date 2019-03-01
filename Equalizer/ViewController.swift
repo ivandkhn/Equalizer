@@ -127,19 +127,23 @@ class ViewController: NSViewController {
         timer = Timer.scheduledTimer(timeInterval: 0.1,
                                      target: self,
                                      selector: #selector(self.updateFFTView),
-                                     userInfo: nil, repeats: true)
+                                     userInfo: nil,
+                                     repeats: true)
     }
        
     @objc func updateFFTView(){
-        fftEngine.fftForward((player?.getRawData())!)
+        guard let player = player else {return}
+        if !(player.isPlaying) {return}
+        guard let rawData = player.getRawData() else {return}
+        fftEngine.fftForward(rawData)
         fftEngine.calculateLogarithmicBands(minFrequency: 20,
                                             maxFrequency: 20000,
                                             bandsPerOctave: 40)
-        var data = fftEngine.bandMagnitudes
-        for i in (data?.indices)! {
-            data![i] = TempiFFT.toDB(data![i])
+        guard var data = fftEngine.bandMagnitudes else {return}
+        for i in data.indices {
+            data[i] = TempiFFT.toDB(data[i])
         }
-        FFTIInputView.data = data!
+        FFTIInputView.data = data
         FFTIInputView.setNeedsDisplay(NSRect(x: 0, y: 0,
                                              width: 400, height: 240))
     }

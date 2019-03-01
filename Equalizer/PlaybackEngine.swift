@@ -63,36 +63,24 @@ class PlaybackEngine {
         }
     }
     
-    var player: AKPlayer
-    
-    var audioFile: AKAudioFile? {
-        didSet {
-            if let c = audioFile?.samplesCount {
-                samplesCount = c
-            } else {
-                samplesCount = 0
-            }
-        }
-    }
-    
+    var player = AKPlayer()
+    var sampleRate: Int = 0
     var samplesCount: Int64 = 0
+    var audioFile: AKAudioFile?
 
     init(filename: URL) {
         audioFile = nil
         do {
             audioFile = try AKAudioFile(forReading: filename)
         } catch  {
-            print("Error while opening file")
+            toConsole("Error while opening file")
         }
-        samplesCount = audioFile?.samplesCount ?? 0
-        toConsole("Loaded file with \(samplesCount) samples.")
-        
-        
-        // if you catch a forced nil unwrapping exception,
-        // most probably you have just copied .wav file in /Eq folder.
-        // You have to do a reference as well: drag and drop this file
-        // into Xcode left panel
-        player = AKPlayer(audioFile: (audioFile!))
+        if let file = audioFile {
+            samplesCount = file.samplesCount
+            sampleRate = Int(file.sampleRate)
+            toConsole("samplesCount \(samplesCount), sampleRate: \(sampleRate)")
+            player = AKPlayer(audioFile: (file))
+        }
     }
     
     func initBeforePlaying() {
@@ -128,9 +116,15 @@ class PlaybackEngine {
         try? AudioKit.start()
     }
     
-    func getRawData() -> [Float] {
-        let frame = Int(player.currentFrame);
-        return Array((audioFile?.floatChannelData![0][frame...frame+1024])!)
+    func getRawData() -> [Float]? {
+        let frame = Int(player.currentFrame)
+        if (frame <= 0) {
+            return nil
+        }
+        guard let slice = audioFile?.floatChannelData![0][frame...frame+1024] else {
+            return nil
+        }
+        return Array(slice)
     }
     
     //MARK: -- parameters modification
