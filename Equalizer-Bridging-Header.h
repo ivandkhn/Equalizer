@@ -9,3 +9,4 @@
 #pragma once
 
 #include "DistortionDSP.hpp"
+#include "ChoirDSP.hpp"

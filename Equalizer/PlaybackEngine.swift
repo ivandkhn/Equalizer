@@ -22,10 +22,10 @@ class PlaybackEngine {
     var allEQs = [AKNode]()
     var gainControllers = [AKDryWetMixer]()
     var distortionEffect = Distortion()
-    //var chorusEffect = Chorus()
+    var chorusEffect = Choir()
     var allEffects = [AKNode]()
     var distortionMixer = AKDryWetMixer()
-    //var chorusMizer = AKDryWetMixer()
+    var chorusMixer = AKDryWetMixer()
     var allDryWetMixers = [AKDryWetMixer]()
     var afterEQMixer = AKMixer()
     var finalMixer = AKMixer()
@@ -103,13 +103,20 @@ class PlaybackEngine {
         afterEQMixer = AKMixer(gainControllers)
         
         distortionEffect = Distortion(afterEQMixer, gain: 0.5)
+        chorusEffect = Choir(afterEQMixer, gain: 0.5)
         allEffects.append(distortionEffect)
+        allEffects.append(chorusEffect)
         // full effect mix
         distortionMixer = AKDryWetMixer(afterEQMixer, distortionEffect, balance: 0)
+        chorusMixer = AKDryWetMixer(afterEQMixer, chorusEffect, balance: 1)
         allDryWetMixers.append(distortionMixer)
+        allDryWetMixers.append(chorusMixer)
+        /*
         for mixer in allDryWetMixers {
             mixer.connect(to: finalMixer)
         }
+        */
+        chorusMixer.connect(to: finalMixer)
 
         AudioKit.output = finalMixer
         player.isLooping = true
@@ -140,6 +147,9 @@ class PlaybackEngine {
         switch eN {
         case 0:
             let effect = allEffects[0] as? Distortion
+            effect?.gain = value
+        case 1:
+            let effect = allEffects[1] as? Choir
             effect?.gain = value
         default:
             toConsole("default case!")
