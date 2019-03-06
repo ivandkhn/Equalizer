@@ -14,6 +14,7 @@ class ViewController: NSViewController {
     @IBOutlet weak var progressBarPlayingStatus: NSProgressIndicator!
     @IBOutlet weak var FFTIInputView: FFTView!
     var timer = Timer()
+    var FFTUpdaterQueue = DispatchQueue(label: "FFTUpdater")
     
     // MARK: -- Model elements:
     var player: PlaybackEngine?
@@ -83,6 +84,7 @@ class ViewController: NSViewController {
         guard let selectedFilename = selectedFile else {return}
         player = PlaybackEngine(filename: selectedFilename)
         player?.initBeforePlaying()
+        fftEngine.windowType = TempiFFTWindowType.hanning
     }
     
     @IBAction func playButtonAction(_ sender: NSButton) {
@@ -92,8 +94,20 @@ class ViewController: NSViewController {
             } else {
                 player?.isPlaying = true
             }
-            fftEngine.windowType = TempiFFTWindowType.hanning
-            scheduleFFTViewUpdateTimer()
+            FFTUpdaterQueue.async {
+                repeat {
+                    if let data = self.calculateFFTData(skippingFirst: 20) {
+                        self.FFTIInputView.data = data
+                        DispatchQueue.main.async {
+                            self.FFTIInputView.setNeedsDisplay(NSRect(
+                                    x: 0,
+                                    y: 0,
+                                    width: self.FFTIInputView.width,
+                                    height: self.FFTIInputView.height))
+                        }
+                    }
+                } while (true);
+            }
         } else {
             _ = showAlert(withText: "Unable to start playing: no file opened")
         }
@@ -123,29 +137,21 @@ class ViewController: NSViewController {
     }
     
     //MARK: -- Helper functions:
-    func scheduleFFTViewUpdateTimer(){
-        timer = Timer.scheduledTimer(timeInterval: 0.1,
-                                     target: self,
-                                     selector: #selector(self.updateFFTView),
-                                     userInfo: nil,
-                                     repeats: true)
-    }
-       
-    @objc func updateFFTView(){
-        guard let player = player else {return}
-        if !(player.isPlaying) {return}
-        guard let rawData = player.getRawData() else {return}
+    func calculateFFTData(skippingFirst startIndex: Int) -> [Float]? {
+        //skippingFirst: FFT resolution is small on low frequencies,
+        //so we can drop some first values and don't draw them at all.
+        guard let player = player else {return nil}
+        if !(player.isPlaying) {return nil}
+        guard let rawData = player.getRawData() else {return nil}
         fftEngine.fftForward(rawData)
         fftEngine.calculateLogarithmicBands(minFrequency: 20,
                                             maxFrequency: 20000,
                                             bandsPerOctave: 40)
-        guard var data = fftEngine.bandMagnitudes else {return}
+        guard var data = fftEngine.bandMagnitudes else {return nil}
         for i in data.indices {
             data[i] = TempiFFT.toDB(data[i])
         }
-        FFTIInputView.data = data
-        FFTIInputView.setNeedsDisplay(NSRect(x: 0, y: 0,
-                                             width: 400, height: 240))
+        return Array(data[startIndex...data.count-1])
     }
     
     func showAlert(withText text: String) -> Bool {

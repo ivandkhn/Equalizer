@@ -12,12 +12,14 @@ class FFTView: NSView {
     var data = [Float]()
     var zoomFactor: Float = 2
     var lowDBGainOffset: Float = 40
+    var width = 0, height = 0
+    let ignoreValuesCount = 20
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
-        let width = self.frame.width
-        let height = self.frame.height
+        width = Int(self.frame.width)
+        height = Int(self.frame.height)
 
         guard let context = NSGraphicsContext.current?.cgContext else {return}
         context.setStrokeColor(CGColor.black)
