@@ -1261,6 +1261,14 @@
                                 <rect key="frame" x="455" y="20" width="400" height="240"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
+                            <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YD4-JO-2Z7">
+                                <rect key="frame" x="428" y="17" width="19" height="245"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" alignment="left" maxValue="200" doubleValue="33" tickMarkPosition="right" sliderType="linear" id="xaE-D9-2oS"/>
+                                <connections>
+                                    <action selector="FFTDBCorrectionSliderAction:" target="XfG-lQ-9wD" id="Th1-Rw-q3M"/>
+                                </connections>
+                            </slider>
                         </subviews>
                     </view>
                     <connections>

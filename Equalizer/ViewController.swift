@@ -14,8 +14,8 @@ class ViewController: NSViewController {
     @IBOutlet weak var progressBarPlayingStatus: NSProgressIndicator!
     @IBOutlet weak var FFTIInputView: FFTView!
     @IBOutlet weak var FFTOutputView: FFTView!
-    var timer = Timer()
     var FFTUpdaterQueue = DispatchQueue(label: "FFTUpdater")
+    var FFTDBCorrection: Float = 33
     
     // MARK: -- Model elements:
     var player: PlaybackEngine?
@@ -97,54 +97,28 @@ class ViewController: NSViewController {
             }
             FFTUpdaterQueue.async {
                 repeat {
-                    if let data = self.player?.getFFTData(source: .input, amplifyBy: 10e5) {
-                        self.FFTIInputView.data = data.map{TempiFFT.toDB($0)}
-                        DispatchQueue.main.async {
-                            self.FFTIInputView.setNeedsDisplay(NSRect(
-                                    x: 0,
-                                    y: 0,
-                                    width: self.FFTIInputView.width,
-                                    height: self.FFTIInputView.height))
-                        }
-                    }
-                    if let dataOut = self.player?.getFFTData(source: .output, amplifyBy: 10e5) {
-                        self.FFTOutputView.data = dataOut.map{TempiFFT.toDB($0)}
-                        DispatchQueue.main.async {
-                            self.FFTOutputView.setNeedsDisplay(NSRect(
-                                x: 0,
-                                y: 0,
-                                width: self.FFTOutputView.width,
-                                height: self.FFTOutputView.height))
-                        }
+                    guard
+                        let dataIn = self.player?.getFFTData(source: .input, amplifyBy: 1),
+                        let dataOut = self.player?.getFFTData(source: .output, amplifyBy: 1)
+                    else {continue}
+                    
+                    self.FFTIInputView.data = dataIn.map{TempiFFT.toDB($0) + self.FFTDBCorrection}
+                    self.FFTOutputView.data = dataOut.map{TempiFFT.toDB($0) + self.FFTDBCorrection}
+                    
+                    DispatchQueue.main.async {
+                        self.FFTIInputView.setNeedsDisplay(NSRect(
+                            x: 0,
+                            y: 0,
+                            width: self.FFTIInputView.width,
+                            height: self.FFTIInputView.height))
+                        self.FFTOutputView.setNeedsDisplay(NSRect(
+                            x: 0,
+                            y: 0,
+                            width: self.FFTOutputView.width,
+                            height: self.FFTOutputView.height))
                     }
                 } while (true);
             }
-/*
-             FFTUpdaterQueue.async {
-             repeat {
-             if let data = self.calculateFFTData(skippingFirst: 20) {
-             self.FFTIInputView.data = data
-             DispatchQueue.main.async {
-             self.FFTIInputView.setNeedsDisplay(NSRect(
-             x: 0,
-             y: 0,
-             width: self.FFTIInputView.width,
-             height: self.FFTIInputView.height))
-             }
-             }
-             if let dataOut = self.player?.getFFTOutputData(skippingFirst: 20) {
-             self.FFTOutputView.data = dataOut.map{TempiFFT.toDB($0)}
-             DispatchQueue.main.async {
-             self.FFTOutputView.setNeedsDisplay(NSRect(
-             x: 0,
-             y: 0,
-             width: self.FFTOutputView.width,
-             height: self.FFTOutputView.height))
-             }
-             }
-             } while (true);
-             }
- */
         } else {
             _ = showAlert(withText: "Unable to start playing: no file opened")
         }
@@ -169,8 +143,9 @@ class ViewController: NSViewController {
         loadedPlayer.isPlaying = false
     }
     
-    @IBAction func inputFFTSliderAction(_ sender: NSSlider) {
-        FFTIInputView.lowDBGainOffset = sender.floatValue
+    @IBAction func FFTDBCorrectionSliderAction(_ sender: NSSlider) {
+        FFTDBCorrection = sender.floatValue
+        toConsole("newValue = \(FFTDBCorrection)")
     }
     
     //MARK: -- Helper functions:
