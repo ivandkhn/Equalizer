@@ -13,6 +13,7 @@ class ViewController: NSViewController {
     // MARK: -- UI-dependent elements:
     @IBOutlet weak var progressBarPlayingStatus: NSProgressIndicator!
     @IBOutlet weak var FFTIInputView: FFTView!
+    @IBOutlet weak var FFTOutputView: FFTView!
     var timer = Timer()
     var FFTUpdaterQueue = DispatchQueue(label: "FFTUpdater")
     
@@ -96,8 +97,8 @@ class ViewController: NSViewController {
             }
             FFTUpdaterQueue.async {
                 repeat {
-                    if let data = self.calculateFFTData(skippingFirst: 20) {
-                        self.FFTIInputView.data = data
+                    if let data = self.player?.getFFTData(source: .input, amplifyBy: 10e5) {
+                        self.FFTIInputView.data = data.map{TempiFFT.toDB($0)}
                         DispatchQueue.main.async {
                             self.FFTIInputView.setNeedsDisplay(NSRect(
                                     x: 0,
@@ -106,8 +107,44 @@ class ViewController: NSViewController {
                                     height: self.FFTIInputView.height))
                         }
                     }
+                    if let dataOut = self.player?.getFFTData(source: .output, amplifyBy: 10e5) {
+                        self.FFTOutputView.data = dataOut.map{TempiFFT.toDB($0)}
+                        DispatchQueue.main.async {
+                            self.FFTOutputView.setNeedsDisplay(NSRect(
+                                x: 0,
+                                y: 0,
+                                width: self.FFTOutputView.width,
+                                height: self.FFTOutputView.height))
+                        }
+                    }
                 } while (true);
             }
+/*
+             FFTUpdaterQueue.async {
+             repeat {
+             if let data = self.calculateFFTData(skippingFirst: 20) {
+             self.FFTIInputView.data = data
+             DispatchQueue.main.async {
+             self.FFTIInputView.setNeedsDisplay(NSRect(
+             x: 0,
+             y: 0,
+             width: self.FFTIInputView.width,
+             height: self.FFTIInputView.height))
+             }
+             }
+             if let dataOut = self.player?.getFFTOutputData(skippingFirst: 20) {
+             self.FFTOutputView.data = dataOut.map{TempiFFT.toDB($0)}
+             DispatchQueue.main.async {
+             self.FFTOutputView.setNeedsDisplay(NSRect(
+             x: 0,
+             y: 0,
+             width: self.FFTOutputView.width,
+             height: self.FFTOutputView.height))
+             }
+             }
+             } while (true);
+             }
+ */
         } else {
             _ = showAlert(withText: "Unable to start playing: no file opened")
         }
@@ -118,8 +155,8 @@ class ViewController: NSViewController {
             if let slider = self.view.viewWithTag(i + 100) as? NSSlider {
                 slider.integerValue = 0
             }
+            player?.modifyParameter(ofBand: i, to: 0)
         }
-        //TODO: recalculate filters as well, not only gui change.
     }
     
     @IBAction func pauseButtonAction(_ sender: NSButton) {

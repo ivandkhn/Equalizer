@@ -29,6 +29,11 @@ class PlaybackEngine {
     var allDryWetMixers = [AKDryWetMixer]()
     var afterEQMixer = AKMixer()
     var finalMixer = AKMixer()
+    var FFTInputTap, FFTOutputTap: AKFFTTap?
+    
+    enum FFTSources {
+        case input, output
+    }
     
     var isPlaying: Bool {
         get {
@@ -117,7 +122,8 @@ class PlaybackEngine {
         }
         */
         chorusMixer.connect(to: finalMixer)
-
+        FFTOutputTap = AKFFTTap(finalMixer)
+        FFTInputTap = AKFFTTap(player)
         AudioKit.output = finalMixer
         player.isLooping = true
         try? AudioKit.start()
@@ -133,6 +139,23 @@ class PlaybackEngine {
         }
         return Array(slice)
     }
+    
+    func getFFTData(source: FFTSources, amplifyBy multiplier: Float) -> [Float]? {
+        switch source {
+        case .input:
+            guard let tap = FFTInputTap else {return nil}
+            return tap.fftData.map {Float($0 * multiplier)}
+        case .output:
+            guard let tap = FFTOutputTap else {return nil}
+            return tap.fftData.map {Float($0 * multiplier)}
+        }
+    }
+    
+    func getFFTOutputData(skippingFirst startIndex: Int) -> [Float]? {
+        guard let tap = FFTOutputTap else {return nil}
+        return tap.fftData.map {Float($0 * 10e5)}
+    }
+    
     
     //MARK: -- parameters modification
     func modifyParameter(ofBand index: Int, to value: Double) {
