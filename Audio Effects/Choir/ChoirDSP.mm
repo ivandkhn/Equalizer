@@ -63,18 +63,13 @@ float ChoirDSP::getParameter(AUParameterAddress address) {
     return 0;
 }
 
-
-// temp buffers to handle values that are close to AudioBuffer boundaries
-// actually have to take approx. 800-1500 samples for buffering
-const int BUFFER_LENGTH = 512; // TODO: inherit from actual buffer size
+const int BUFFER_LENGTH = 5000; //same is a maximum delay length in samples
 float bufferL[BUFFER_LENGTH];
 float bufferR[BUFFER_LENGTH];
-float *curr_in, *prev_in, *out;
-int offset;
+float *curr_in_L, *curr_in_R, *prev_in, *outL, *outR;
+unsigned int currentBufferPosition = 0;
 
 void ChoirDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset) {
-    offset = (int)_private->leftGainRamp.getValue();
-    
     for (int frameIndex = 0; frameIndex < frameCount; ++frameIndex) {
         int frameOffset = int(frameIndex + bufferOffset);
         if ((frameOffset & 0x7) == 0) {
@@ -82,63 +77,26 @@ void ChoirDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOff
             _private->rightGainRamp.advanceTo(_now + frameOffset);
         }
         
-        for (int channel = 0; channel < _nChannels; ++channel) {
-            if (frameIndex >= offset) {
-                prev_in = (float *)_inBufferListPtr->mBuffers[channel].mData
-                        + frameOffset - offset;
-            } else {
-                if (channel == 0) {
-                    prev_in = &bufferL[BUFFER_LENGTH-1-offset+frameIndex];
-                } else {
-                    prev_in = &bufferR[BUFFER_LENGTH-1-offset+frameIndex];
-                }
-            }
-            curr_in = (float *)_inBufferListPtr->mBuffers[channel].mData + frameOffset;
-            out = (float *)_outBufferListPtr->mBuffers[channel].mData + frameOffset;
-            *out = *prev_in + *curr_in;
-            if (channel == 0) {
-                //cout << *prev_in << " " << *curr_in << " " << *out << endl;
-            }
-        }
-    }
-    // TODO: memcpy ??
-    for (int i=0; i<512; i++) {
-        bufferL[i] = *((float *)_inBufferListPtr->mBuffers[0].mData + i);
-        bufferR[i] = *((float *)_inBufferListPtr->mBuffers[1].mData + i);
-    }
-}
-
-
-// first attempt
-
-/*
-float buffer[512];
-
-void ChoirDSP::process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset) {
-    int offset = (int)_private->leftGainRamp.getValue();
-    for (int frameIndex = 0; frameIndex < frameCount; ++frameIndex) {
-        assert(bufferOffset == 0);
-        // do ramping every 8 samples
-        if ((frameIndex & 0x7) == 0) {
-            _private->leftGainRamp.advanceTo(_now + frameIndex);
-            _private->rightGainRamp.advanceTo(_now + frameIndex);
-        }
-        for (int channel = 0; channel < _nChannels; ++channel) {
-            if (frameCount >= offset) {
-                float *curr_in = (float *)_inBufferListPtr->mBuffers[channel].mData + frameIndex;
-                float *prev_in = (float *)_inBufferListPtr->mBuffers[channel].mData + frameIndex - offset;
-                //                          ^ out -> in
-                float *out = (float *)_outBufferListPtr->mBuffers[channel].mData + frameIndex;
-                *out = *prev_in + *curr_in;
-                buffer[frameIndex] = *curr_in;
-            } else {
-                float *curr_in = (float *)_inBufferListPtr->mBuffers[channel].mData + frameIndex;
-                float *prev_in = &buffer[511-offset+frameIndex];
-                float *out = (float *)_outBufferListPtr->mBuffers[channel].mData + frameIndex;
-                *out = *prev_in + *curr_in;
-                buffer[frameIndex] = *curr_in;
-            }
+        outL = (float *)_outBufferListPtr->mBuffers[0].mData + frameOffset;
+        outR = (float *)_outBufferListPtr->mBuffers[1].mData + frameOffset;
+        curr_in_L = (float *)_inBufferListPtr->mBuffers[0].mData + frameOffset;
+        curr_in_R = (float *)_inBufferListPtr->mBuffers[1].mData + frameOffset;
+        
+        *outL = *curr_in_L + bufferL[currentBufferPosition];
+        *outR = *curr_in_R + bufferR[currentBufferPosition];
+        
+        bufferL[currentBufferPosition] = *curr_in_L;
+        bufferR[currentBufferPosition] = *curr_in_R;
+        
+        //simplest ring buffer
+        currentBufferPosition++;
+        if (
+            currentBufferPosition >= (int)_private->leftGainRamp.getValue()-1 ||
+            // we can accidenlty run out of array boundaries using leftGainRamp.getValue,
+            // so this condition prevents thread crash
+            currentBufferPosition >= BUFFER_LENGTH-1
+            ) {
+            currentBufferPosition = 0;
         }
     }
 }
-*/
