@@ -9,13 +9,11 @@
 import Cocoa
 
 class ViewController: NSViewController {
-    
-    // MARK: -- UI-dependent elements:
-    @IBOutlet weak var progressBarPlayingStatus: NSProgressIndicator!
+    // MARK: -- UI-dependent elemelts
     @IBOutlet weak var FFTIInputView: FFTView!
     @IBOutlet weak var FFTOutputView: FFTView!
     var FFTUpdaterQueue = DispatchQueue(label: "FFTUpdater")
-    var FFTDBCorrection: Float = 33
+    var FFTDBCorrection: Float = 80
     
     // MARK: -- Model elements:
     var player: PlaybackEngine?
@@ -25,7 +23,6 @@ class ViewController: NSViewController {
         }
     }
     var slidersCount = 8
-    var fftEngine = TempiFFT(withSize: 1024, sampleRate: 44100)
     
     // MARK: -- Actions:
     @IBAction func EQsliderMovedAction(_ sender: NSSlider) {
@@ -85,7 +82,6 @@ class ViewController: NSViewController {
         guard let selectedFilename = selectedFile else {return}
         player = PlaybackEngine(filename: selectedFilename)
         player?.initBeforePlaying()
-        fftEngine.windowType = TempiFFTWindowType.hanning
     }
     
     @IBAction func playButtonAction(_ sender: NSButton) {
@@ -98,12 +94,26 @@ class ViewController: NSViewController {
             FFTUpdaterQueue.async {
                 repeat {
                     guard
-                        let dataIn = self.player?.getFFTData(source: .input, amplifyBy: 1),
-                        let dataOut = self.player?.getFFTData(source: .output, amplifyBy: 1)
+                        let dataIn = self.player?.getFFTData(
+                            source: .input,
+                            amplifyBy: 1
+                        ),
+                        let dataOut = self.player?.getFFTData(
+                            source: .output,
+                            amplifyBy: 1
+                        )
                     else {continue}
-                                       
-                    self.FFTIInputView.modifyFFTResults(newData: dataIn.map{TempiFFT.toDB($0) + self.FFTDBCorrection})
-                    self.FFTOutputView.modifyFFTResults(newData: dataOut.map{TempiFFT.toDB($0) + self.FFTDBCorrection})
+                    
+                    self.FFTIInputView.modifyFFTResults(
+                        newData: dataIn.map{
+                            self.toDB($0) + self.FFTDBCorrection
+                            
+                    })
+                    self.FFTOutputView.modifyFFTResults(
+                        newData: dataOut.map{
+                            self.toDB($0) + self.FFTDBCorrection
+                            
+                    })
                     
                     DispatchQueue.main.async {
                         self.FFTIInputView.setNeedsDisplay(NSRect(
@@ -154,23 +164,6 @@ class ViewController: NSViewController {
     }
     
     //MARK: -- Helper functions:
-    func calculateFFTData(skippingFirst startIndex: Int) -> [Float]? {
-        //skippingFirst: FFT resolution is small on low frequencies,
-        //so we can drop some first values and don't draw them at all.
-        guard let player = player else {return nil}
-        if !(player.isPlaying) {return nil}
-        guard let rawData = player.getRawData() else {return nil}
-        fftEngine.fftForward(rawData)
-        fftEngine.calculateLogarithmicBands(minFrequency: 20,
-                                            maxFrequency: 20000,
-                                            bandsPerOctave: 40)
-        guard var data = fftEngine.bandMagnitudes else {return nil}
-        for i in data.indices {
-            data[i] = TempiFFT.toDB(data[i])
-        }
-        return Array(data[startIndex...data.count-1])
-    }
-    
     func showAlert(withText text: String) -> Bool {
         let alert = NSAlert()
         alert.messageText = text
@@ -187,6 +180,11 @@ class ViewController: NSViewController {
             // We'll handle it in another buttons.
             return nil
         }
+    }
+    
+    func toDB(_ inMagnitude: Float) -> Float {
+        let magnitude = max(inMagnitude, 0.000000000001)
+        return 10 * log10f(magnitude)
     }
     
     //MARK: -- Overriden functions:

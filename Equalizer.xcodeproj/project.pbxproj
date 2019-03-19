@@ -19,6 +19,10 @@
 		99B431BA22247946007C73D7 /* DistortionDSP.mm in Sources */ = {isa = PBXBuildFile; fileRef = 99B431B622247945007C73D7 /* DistortionDSP.mm */; };
 		99B431BB22247946007C73D7 /* DistortionAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B431B722247946007C73D7 /* DistortionAudioUnit.swift */; };
 		99B431BC22247946007C73D7 /* Distortion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B431B922247946007C73D7 /* Distortion.swift */; };
+		99C352202225BBEB00A2DD71 /* FFTView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C3521F2225BBEB00A2DD71 /* FFTView.swift */; };
+		99D252CA222C0BCD0034E75C /* Choir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D252C7222C0BCD0034E75C /* Choir.swift */; };
+		99D252CB222C0BCD0034E75C /* ChoirAudioUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D252C8222C0BCD0034E75C /* ChoirAudioUnit.swift */; };
+		99D252CC222C0BCD0034E75C /* ChoirDSP.mm in Sources */ = {isa = PBXBuildFile; fileRef = 99D252C9222C0BCD0034E75C /* ChoirDSP.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +57,11 @@
 		99B431B722247946007C73D7 /* DistortionAudioUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistortionAudioUnit.swift; sourceTree = "<group>"; };
 		99B431B822247946007C73D7 /* DistortionDSP.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DistortionDSP.hpp; sourceTree = "<group>"; };
 		99B431B922247946007C73D7 /* Distortion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Distortion.swift; sourceTree = "<group>"; };
+		99C3521F2225BBEB00A2DD71 /* FFTView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFTView.swift; sourceTree = "<group>"; };
+		99D252C6222C0BCD0034E75C /* ChoirDSP.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ChoirDSP.hpp; sourceTree = "<group>"; };
+		99D252C7222C0BCD0034E75C /* Choir.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Choir.swift; sourceTree = "<group>"; };
+		99D252C8222C0BCD0034E75C /* ChoirAudioUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoirAudioUnit.swift; sourceTree = "<group>"; };
+		99D252C9222C0BCD0034E75C /* ChoirDSP.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChoirDSP.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +105,7 @@
 				9945A89421D3C2DA00D2EA55 /* Main.storyboard */,
 				9945A89821D3C2DA00D2EA55 /* Equalizer.entitlements */,
 				9945A89721D3C2DA00D2EA55 /* Info.plist */,
+				99C3521F2225BBEB00A2DD71 /* FFTView.swift */,
 			);
 			path = Equalizer;
 			sourceTree = "<group>";
@@ -120,6 +130,10 @@
 		998F8FEF222508F300F15808 /* Choir */ = {
 			isa = PBXGroup;
 			children = (
+				99D252C7222C0BCD0034E75C /* Choir.swift */,
+				99D252C8222C0BCD0034E75C /* ChoirAudioUnit.swift */,
+				99D252C6222C0BCD0034E75C /* ChoirDSP.hpp */,
+				99D252C9222C0BCD0034E75C /* ChoirDSP.mm */,
 			);
 			path = Choir;
 			sourceTree = "<group>";
@@ -234,10 +248,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				9945A89121D3C2D700D2EA55 /* ViewController.swift in Sources */,
+				99C352202225BBEB00A2DD71 /* FFTView.swift in Sources */,
 				9945A88F21D3C2D700D2EA55 /* AppDelegate.swift in Sources */,
+				99D252CC222C0BCD0034E75C /* ChoirDSP.mm in Sources */,
 				99B431BB22247946007C73D7 /* DistortionAudioUnit.swift in Sources */,
 				99B431BA22247946007C73D7 /* DistortionDSP.mm in Sources */,
+				99D252CB222C0BCD0034E75C /* ChoirAudioUnit.swift in Sources */,
 				99B431BC22247946007C73D7 /* Distortion.swift in Sources */,
+				99D252CA222C0BCD0034E75C /* Choir.swift in Sources */,
 				9982C4E521DE09C3009FA36A /* PlaybackEngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -392,6 +410,7 @@
 				OTHER_LDFLAGS = "-lc++";
 				PRODUCT_BUNDLE_IDENTIFIER = johndahrah.Equalizer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Equalizer-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 			};
