@@ -101,9 +101,9 @@ class ViewController: NSViewController {
                         let dataIn = self.player?.getFFTData(source: .input, amplifyBy: 1),
                         let dataOut = self.player?.getFFTData(source: .output, amplifyBy: 1)
                     else {continue}
-                    
-                    self.FFTIInputView.data = dataIn.map{TempiFFT.toDB($0) + self.FFTDBCorrection}
-                    self.FFTOutputView.data = dataOut.map{TempiFFT.toDB($0) + self.FFTDBCorrection}
+                                       
+                    self.FFTIInputView.modifyFFTResults(newData: dataIn.map{TempiFFT.toDB($0) + self.FFTDBCorrection})
+                    self.FFTOutputView.modifyFFTResults(newData: dataOut.map{TempiFFT.toDB($0) + self.FFTDBCorrection})
                     
                     DispatchQueue.main.async {
                         self.FFTIInputView.setNeedsDisplay(NSRect(
@@ -146,6 +146,11 @@ class ViewController: NSViewController {
     @IBAction func FFTDBCorrectionSliderAction(_ sender: NSSlider) {
         FFTDBCorrection = sender.floatValue
         toConsole("newValue = \(FFTDBCorrection)")
+    }
+    
+    @IBAction func FFTAverageTimeSliderAction(_ sender: NSSlider) {
+        FFTIInputView.bufferLength = sender.integerValue
+        FFTOutputView.bufferLength = sender.integerValue
     }
     
     //MARK: -- Helper functions:

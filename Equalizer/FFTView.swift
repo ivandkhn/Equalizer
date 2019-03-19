@@ -9,11 +9,45 @@
 import Cocoa
 
 class FFTView: NSView {
-    var data = [Float]()
+    
+    var dataToDraw = [Float](repeating: -20, count: 512)
+    
+    var bufferLength = 20 //store last n FFT results
+    var currentBufferIndex = 0
+    var lastFFTResults = [[Float]()]
+    
+    
     var zoomFactor: Float = 2
-    var lowDBGainOffset: Float = 40
+    var lowDBGainOffset: Float = 80
     var width = 0, height = 0
     let ignoreValuesCount = 200
+    
+    func modifyFFTResults(newData: [Float]) {
+        if lastFFTResults.count < bufferLength {
+            lastFFTResults.append(newData)
+        } else {
+            lastFFTResults[currentBufferIndex] = newData
+            currentBufferIndex += 1
+            if currentBufferIndex >= bufferLength {
+                currentBufferIndex = 0
+            }
+        }
+        computeAverage()
+    }
+    
+    fileprivate func computeAverage() {
+        var tempSum: Float = 0;
+        for index in dataToDraw.indices {
+            tempSum = 0
+            for j in 0..<bufferLength {
+                if j>=lastFFTResults.count || lastFFTResults[j].count == 0 {
+                    continue
+                }
+                tempSum += lastFFTResults[j][index]
+            }
+            dataToDraw[index] = tempSum / Float(bufferLength)
+        }
+    }
 
     /// Given float variables in [data] array,
     /// fits and strokes all the values according to the view boundaries.
@@ -29,14 +63,14 @@ class FFTView: NSView {
         context.setLineWidth(CGFloat(3))
         
         var xComputed, yComputed: Int
-        if (data.count > 0) {
-            let firstPointYCoord = Int(data[0])
+        if (dataToDraw.count > 0) {
+            let firstPointYCoord = Int(dataToDraw[0])
             context.move(to: CGPoint(x: 0, y: firstPointYCoord))
-            for i in data.indices.dropLast(ignoreValuesCount).dropFirst() {
+            for i in dataToDraw.indices.dropLast(ignoreValuesCount).dropFirst() {
                 xComputed = Int(
-                    Float(i) * Float(width) / Float(data.count-ignoreValuesCount)
+                    Float(i) * Float(width) / Float(dataToDraw.count-ignoreValuesCount)
                 )
-                yComputed = Int(data[i] * zoomFactor + lowDBGainOffset)
+                yComputed = Int(dataToDraw[i] * zoomFactor + lowDBGainOffset)
                 let point = CGPoint(x: xComputed, y: yComputed)
                 context.addLine(to: point)
             }
