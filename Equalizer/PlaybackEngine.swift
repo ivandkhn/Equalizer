@@ -10,8 +10,8 @@ import Foundation
 import AudioKit
 
 // pre-defined filtering parameters.
-var initialEqualizerBands: [Double] = [100, 300, 700, 1500, 3100, 6300, 12700]
-var bandsAmount = initialEqualizerBands.count + 1
+var EQBands: [Double] = [100, 300, 700, 1500, 3100, 6300, 12700]
+var bandsAmount = EQBands.count + 1
 let xFadeFactor = 0.1
 
 class PlaybackEngine {
@@ -88,45 +88,52 @@ class PlaybackEngine {
         }
     }
     
-    func initBeforePlaying() {
+    func initializeAllNodes() {
+        // starting from EQ LP, HP and BP filters
         BPFilters = getMiddleFiltersInstances(
-            inputNode: player, bands: initialEqualizerBands
+            inputNode: player, bands: EQBands
         )
         LPFilter = AKLowPassButterworthFilter(
-            player, cutoffFrequency: initialEqualizerBands[0]
+            player, cutoffFrequency: EQBands[0]
         )
         HPFilter = AKHighPassFilter(
             player,
-            cutoffFrequency: initialEqualizerBands[initialEqualizerBands.count-1]
+            cutoffFrequency: EQBands[EQBands.count-1]
         )
         
-        //attach all nodes together
+        //attach all EQ's-dependent nodes together
         allEQs.append(LPFilter)
         allEQs.append(contentsOf: BPFilters)
         allEQs.append(HPFilter)
         gainControllers = getGainControllerInstances(inputNode: allEQs)
         afterEQMixer = AKMixer(gainControllers)
         
+        // create effects pool
+        // make a parallel effects processing
         distortionEffect = Distortion(afterEQMixer, gain: 0.5)
         chorusEffect = Choir(afterEQMixer, gain: 0.5)
         allEffects.append(distortionEffect)
         allEffects.append(chorusEffect)
-        // full effect mix
+        
+        // create dry-wet controllers and connect them to final mixer
         distortionMixer = AKDryWetMixer(afterEQMixer, distortionEffect, balance: 0)
-        chorusMixer = AKDryWetMixer(afterEQMixer, chorusEffect, balance: 1)
+        chorusMixer = AKDryWetMixer(afterEQMixer, chorusEffect, balance: 0)
         allDryWetMixers.append(distortionMixer)
         allDryWetMixers.append(chorusMixer)
-        /*
         for mixer in allDryWetMixers {
             mixer.connect(to: finalMixer)
         }
-        */
-        chorusMixer.connect(to: finalMixer)
+        
+        // initialize FFT evaluation
         FFTOutputTap = AKFFTTap(finalMixer)
         FFTInputTap = AKFFTTap(player)
+        
+        // final setup of the audio engine
         AudioKit.output = finalMixer
         player.isLooping = true
         try? AudioKit.start()
+        
+        // now waiting for player node to start playback
     }
     
     func getRawData() -> [Float]? {

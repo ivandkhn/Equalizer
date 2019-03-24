@@ -81,7 +81,7 @@ class ViewController: NSViewController {
         selectedFile = selectFile()
         guard let selectedFilename = selectedFile else {return}
         player = PlaybackEngine(filename: selectedFilename)
-        player?.initBeforePlaying()
+        player?.initializeAllNodes()
     }
     
     @IBAction func playButtonAction(_ sender: NSButton) {
