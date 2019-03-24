@@ -10,3 +10,4 @@
 
 #include "DistortionDSP.hpp"
 #include "ChoirDSP.hpp"
+#include "fdacoefs.h"

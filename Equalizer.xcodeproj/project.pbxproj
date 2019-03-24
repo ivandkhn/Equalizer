@@ -58,6 +58,7 @@
 		99B431B822247946007C73D7 /* DistortionDSP.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DistortionDSP.hpp; sourceTree = "<group>"; };
 		99B431B922247946007C73D7 /* Distortion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Distortion.swift; sourceTree = "<group>"; };
 		99C3521F2225BBEB00A2DD71 /* FFTView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFTView.swift; sourceTree = "<group>"; };
+		99C3BDEB224500AE00E0AA8F /* fdacoefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fdacoefs.h; sourceTree = "<group>"; };
 		99D252C6222C0BCD0034E75C /* ChoirDSP.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ChoirDSP.hpp; sourceTree = "<group>"; };
 		99D252C7222C0BCD0034E75C /* Choir.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Choir.swift; sourceTree = "<group>"; };
 		99D252C8222C0BCD0034E75C /* ChoirAudioUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoirAudioUnit.swift; sourceTree = "<group>"; };
@@ -141,6 +142,7 @@
 		99B431AD22247471007C73D7 /* Audio Effects */ = {
 			isa = PBXGroup;
 			children = (
+				99C3BDEA2244FBE400E0AA8F /* Eq */,
 				998F8FEF222508F300F15808 /* Choir */,
 				99B431AE22247484007C73D7 /* Distortion */,
 			);
@@ -165,6 +167,14 @@
 				9945A89221D3C2DA00D2EA55 /* Assets.xcassets */,
 			);
 			path = "Supporting files";
+			sourceTree = "<group>";
+		};
+		99C3BDEA2244FBE400E0AA8F /* Eq */ = {
+			isa = PBXGroup;
+			children = (
+				99C3BDEB224500AE00E0AA8F /* fdacoefs.h */,
+			);
+			path = Eq;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
